@@ -3,7 +3,6 @@ import Navbar from "./components/Navbar.vue";
 import Sidebar from "./components/sidebar/index.vue";
 import Appmain from "./components/Appmain.vue";
 import variables from "@/styles/variables.module.scss";
-console.log(variables);
 </script>
 <template>
   <div class="app-wrapper">
@@ -36,8 +35,8 @@ console.log(variables);
 .fixed-header {
   position: fixed;
   top: 0;
-  // right: 0;
+  right: 0;
   z-index: 9;
-  width: calc(100%-#{$sideBarWidth});
+  width: calc(100% - #{$sideBarWidth});
 }
 </style>
