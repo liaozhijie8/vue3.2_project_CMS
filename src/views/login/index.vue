@@ -22,10 +22,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       isLoading.value = true;
-      counter.login_set("user/login", {
-        user_name: ruleForm.username,
-        password: ruleForm.password,
-      });
+      counter
+        .login_set("user/login", {
+          user_name: ruleForm.username,
+          password: ruleForm.password,
+        })
+        .catch(() => {
+          isLoading.value = false;
+        });
     } else {
       console.log("error submit!");
       return false;

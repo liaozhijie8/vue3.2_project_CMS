@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 // import md5 from "md5";
-import { login, profile } from "@/api/user";
+import { changePassword, login, profile } from "@/api/user";
 import { TOKEN } from "@/constant";
 import { setItem, getItem, removeAllItem } from "@/utils/storage";
 import router from "@/router";
 import { ElMessage } from "element-plus";
 import { setTimeStamp } from "@/utils/auth";
+import type { ChangePassword } from "@/interface/user_interface";
+// 类型接口
 
 export const userStore = defineStore("user", () => {
   /* 登录模块 */
@@ -22,7 +24,6 @@ export const userStore = defineStore("user", () => {
         password,
       })
         .then((res) => {
-          ElMessage.success(res.message);
           const { token } = res.result;
           user_token.value = token;
           setItem(TOKEN, token);
@@ -31,6 +32,7 @@ export const userStore = defineStore("user", () => {
           // 保存登录时间
           setTimeStamp();
           router.push("/");
+          ElMessage.success(`欢迎回来,${userInfo.user_name}`);
           resolve(res);
         })
         .catch((err) => {
@@ -55,6 +57,10 @@ export const userStore = defineStore("user", () => {
     // TODO: 清理权限
     router.push("/login");
   };
+  /* 修改用户密码 */
+  const changepas = async (content: any, palyload: ChangePassword) => {
+    return await changePassword(palyload);
+  };
 
   return {
     login_set,
@@ -64,5 +70,6 @@ export const userStore = defineStore("user", () => {
     userInfo,
     hasUserInfo,
     logout,
+    changepas,
   };
 });

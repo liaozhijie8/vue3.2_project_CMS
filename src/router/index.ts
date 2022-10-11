@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
+import Layout from "@/layout/index.vue";
 /* 公开路由表 */
 const publicRouter = [
   {
     path: "/",
-    component: () => import("@/layout/index.vue"),
+    component: Layout,
   },
   {
     path: "/login",

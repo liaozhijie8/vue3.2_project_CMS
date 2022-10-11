@@ -1,9 +1,10 @@
 import { TOKEN } from "@/constant";
 import axios from "axios";
-import { ElMessage } from "element-plus";
+import { ElNotification } from "element-plus";
 import { getItem } from "./storage";
 import { userStore } from "@/stores/user";
 import { isTokenTimeout } from "./auth";
+import type { LoginRes } from "@/interface/user_interface";
 const service = axios.create({
   baseURL: "/api",
   timeout: 5000,
@@ -32,7 +33,11 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (res) => {
     const { message, result } = res.data;
-    return { result, message };
+    const temp: LoginRes = {
+      message,
+      result,
+    };
+    return temp;
   },
   (err) => {
     const user = userStore();
@@ -42,10 +47,10 @@ service.interceptors.response.use(
       if (code === "10101") {
         user.logout();
       }
-      ElMessage.error(message);
+      ElNotification.error(message);
       return Promise.reject(err.response.data);
     }
-    ElMessage.error(err.message);
+    ElNotification.error(err.message);
     return Promise.reject(err);
   }
 );

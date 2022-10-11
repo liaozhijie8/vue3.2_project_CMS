@@ -1,3 +1,4 @@
+import type { ChangePassword } from "@/interface/user_interface";
 import request from "@/utils/request";
 
 /*
@@ -18,5 +19,14 @@ export const profile = () => {
   return request({
     url: "/profile",
     method: "GET",
+  });
+};
+
+/* 修改密码 */
+export const changePassword = (data: ChangePassword) => {
+  return request({
+    url: "/change",
+    method: "PATCH",
+    data,
   });
 };
