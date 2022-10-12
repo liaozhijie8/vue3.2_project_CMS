@@ -1,28 +1,31 @@
 <template>
-  <el-breadcrumb :separator-icon="ArrowRight">
-    <el-breadcrumb-item
-      v-for="(item, index) in breadcrumbData"
-      :key="item.path"
-    >
-      <!-- 不可点击 -->
-      <span class="no-redirect" v-if="index === breadcrumbData.length - 1">{{
-        item.meta.title
-      }}</span>
-      <!-- 可点击 -->
-      <span class="redirect" v-else @click="onLink(item)">{{
-        item.meta.title
-      }}</span>
-    </el-breadcrumb-item>
+  <el-breadcrumb class="breadcrumb" :separator-icon="ArrowRight">
+    <transition-group name="breadcrumb">
+      <el-breadcrumb-item
+        v-for="(item, index) in breadcrumbData"
+        :key="item.path"
+      >
+        <!-- 不可点击 -->
+        <span class="no-redirect" v-if="index === breadcrumbData.length - 1">{{
+          item.meta.title
+        }}</span>
+        <!-- 可点击 -->
+        <span class="redirect" v-else @click="onLink(item)">{{
+          item.meta.title
+        }}</span>
+      </el-breadcrumb-item>
+    </transition-group>
   </el-breadcrumb>
 </template>
 
 <script lang="ts" setup>
 import { ArrowRight } from "@element-plus/icons-vue";
 import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { colorStore } from "@/stores";
 const color = colorStore();
 const route = useRoute();
+const router = useRouter();
 let breadcrumbData = ref([]);
 const getBreadcrumData = () => {
   breadcrumbData.value = route.matched.filter(
@@ -42,8 +45,8 @@ watch(
 /* 背景色 */
 const colorMenubg = ref(color.commonColor.menuBg);
 /* 可点击事件 */
-const onLink = () => {
-  alert("11");
+const onLink = (item) => {
+  router.push(item.path);
 };
 </script>
 <style lang="scss" scoped>
