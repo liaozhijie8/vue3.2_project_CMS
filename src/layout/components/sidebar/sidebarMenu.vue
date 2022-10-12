@@ -1,63 +1,44 @@
 <template>
   <el-menu
-    default-active="1"
+    :default-active="default_active"
     class="el-menu-vertical-demo"
-    :collapse="isCollapse"
-    background-color="#545c64"
-    text-color="#fff"
-    active-text-color="#ffd04b"
-    @open="handleOpen"
-    @close="handleClose"
+    :collapse="app.sidebarOpened"
+    :background-color="color.commonColor.menuBg"
+    :text-color="color.commonColor.menuText"
+    :active-text-color="color.commonColor.menuActiveText"
+    router
   >
-    <el-sub-menu index="1">
-      <template #title>
-        <el-icon><location /></el-icon>
-        <span>导航栏一</span>
-      </template>
-      <el-menu-item-group>
-        <template #title><span>Group One</span></template>
-        <el-menu-item index="1-1">item one</el-menu-item>
-        <el-menu-item index="1-2">item two</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title><span>item four</span></template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon><icon-menu /></el-icon>
-      <template #title>导航栏二</template>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <el-icon><document /></el-icon>
-      <template #title>导航栏三</template>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon><setting /></el-icon>
-      <template #title>设置</template>
-    </el-menu-item>
+    <SidebarItem
+      v-for="item in routesValue"
+      :key="item.path"
+      :route="item"
+    ></SidebarItem>
   </el-menu>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from "@element-plus/icons-vue";
-
-const isCollapse = ref(false);
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
+import router from "@/router";
+import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
+import { colorStore, appStore } from "@/stores";
+// 处理路由表函数
+import { filterRouters, generateMenus } from "@/utils/route";
+import SidebarItem from "./sidebarItem.vue";
+const app = appStore();
+const color = colorStore();
+console.log(color.commonColor);
+/* 动态路由表解析 */
+const routes = computed(() => {
+  const filter = filterRouters(router.getRoutes());
+  return generateMenus(filter);
+});
+const routesValue = ref(routes.value);
+/* 设置默认激活项 */
+const route = useRoute();
+const default_active = computed(() => {
+  const { path } = route;
+  return path;
+});
 </script>
 
 <style lang="scss" scoped></style>

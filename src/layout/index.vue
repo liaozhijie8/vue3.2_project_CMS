@@ -3,9 +3,11 @@ import Navbar from "./components/Navbar.vue";
 import Sidebar from "./components/sidebar/index.vue";
 import Appmain from "./components/Appmain.vue";
 import variables from "@/styles/variables.module.scss";
+import { appStore } from "@/stores/app";
+const app = appStore();
 </script>
 <template>
-  <div class="app-wrapper">
+  <div class="app-wrapper" :class="{ hideSidebar: app.sidebarOpened }">
     <!-- 左侧menu -->
     <Sidebar
       class="sidebar-container"
@@ -34,9 +36,11 @@ import variables from "@/styles/variables.module.scss";
 }
 .fixed-header {
   position: fixed;
-  top: 0;
-  right: 0;
   z-index: 9;
   width: calc(100% - #{$sideBarWidth});
+  transition: width $sideBarDuration;
+}
+.hideSidebar .fixed-header {
+  width: calc(100% - #{$hideSideBarWidth});
 }
 </style>

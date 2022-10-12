@@ -1,15 +1,7 @@
-<script setup lang="ts">
-import { userStore } from "@/stores/user";
-const user = userStore();
-const test = () => {
-  console.log(user.userInfo);
-};
-</script>
+<script setup lang="ts"></script>
 <template>
   <div class="app-main">
-    app
-    <button @click="user.getProfile">点击</button>
-    <button @click="test">token</button>
+    <router-view></router-view>
   </div>
 </template>
 <style scoped lang="scss">

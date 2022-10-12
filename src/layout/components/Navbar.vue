@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { userStore } from "@/stores/user";
+import { userStore } from "@/stores";
 import { ElMessage, ElNotification } from "element-plus";
 import { validateNewPassword } from "@/utils/validate";
+import Hamburger from "../../components/hamburger/index.vue";
+import Breadcrumb from "../../components/breadcrumb/index.vue";
 const user = userStore();
 
 /* dropdown栏数据设置 */
@@ -56,13 +58,19 @@ const openChangePassword = () => {
   dialogFormVisible.value = true;
 };
 // 提交密码
+const is_loading = ref(false);
 const submitPassword = () => {
   const { originalPassword, newPassword, confirmPassword } = form;
   if (originalPassword && newPassword && confirmPassword) {
+    is_loading.value = true;
     user
       .changepas("修改密码", { originalPassword, newPassword })
-      .then((res) => {
+      .then(() => {
+        is_loading.value = false;
         dialogFormVisible.value = false;
+      })
+      .catch(() => {
+        is_loading.value = false;
       });
   } else {
     ElNotification.error("请输入完整参数");
@@ -71,6 +79,11 @@ const submitPassword = () => {
 </script>
 <template>
   <div class="navbar">
+    <!-- nav前半部分 -->
+    <div class="left-navbar">
+      <Hamburger class="hamburger"></Hamburger>
+      <Breadcrumb></Breadcrumb>
+    </div>
     <!-- 下拉信息框 -->
     <el-dropdown class="right-menu">
       <span class="el-dropdown-link">
@@ -137,7 +150,12 @@ const submitPassword = () => {
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="submitPassword">Confirm</el-button>
+          <el-button
+            type="primary"
+            :loading="is_loading"
+            @click="submitPassword"
+            >Confirm</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -146,13 +164,25 @@ const submitPassword = () => {
 <style scoped lang="scss">
 .navbar {
   overflow: hidden;
-  position: relative;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   height: 50px;
+  .left-navbar {
+    display: flex;
+    align-items: center;
+    .hamburger {
+      height: 100%;
+      padding: 0 10px;
+      cursor: pointer;
+      transition: background 0.5;
+      &:hover {
+        background: rgba(221, 224, 225, 0.08);
+      }
+    }
+  }
   .right-menu {
     float: right;
     padding-right: 16px;
