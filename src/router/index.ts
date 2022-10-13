@@ -67,6 +67,21 @@ const privateRouter = [
       },
     ],
   },
+  /* 购物车操作 */
+  {
+    path: "/carts",
+    component: Layout,
+    redirect: "/carts/add",
+    meta: { title: "购物车", icon: "ShoppingTrolley" },
+    children: [
+      {
+        path: "/carts/add",
+        name: "carts",
+        component: () => import("@/views/carts/index.vue"),
+        meta: { title: "查看用户购物车", icon: "TrendCharts" },
+      },
+    ],
+  },
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

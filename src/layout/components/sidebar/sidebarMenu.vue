@@ -26,7 +26,6 @@ import { filterRouters, generateMenus } from "@/utils/route";
 import SidebarItem from "./sidebarItem.vue";
 const app = appStore();
 const color = colorStore();
-console.log(color.commonColor);
 /* 动态路由表解析 */
 const routes = computed(() => {
   const filter = filterRouters(router.getRoutes());

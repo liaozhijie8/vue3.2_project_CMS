@@ -5,6 +5,7 @@ import { ElMessage, ElNotification } from "element-plus";
 import { validateNewPassword } from "@/utils/validate";
 import Hamburger from "../../components/hamburger/index.vue";
 import Breadcrumb from "../../components/breadcrumb/index.vue";
+import LangSelect from "../../components/langSelect/index.vue";
 const user = userStore();
 
 /* dropdown栏数据设置 */
@@ -85,31 +86,37 @@ const submitPassword = () => {
       <Breadcrumb></Breadcrumb>
     </div>
     <!-- 下拉信息框 -->
-    <el-dropdown class="right-menu">
-      <span class="el-dropdown-link">
-        <el-avatar shape="square" :size="30" fit="cover" :src="ava_url" />
-        <span>{{ user.userInfo.user_name }}</span>
-        <el-icon class="el-icon--right">
-          <Setting />
-        </el-icon>
-      </span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <router-link to="/">
-            <el-dropdown-item>首页</el-dropdown-item>
-          </router-link>
-          <el-dropdown-item @click="openChangePassword"
-            >修改密码</el-dropdown-item
-          >
-          <router-link to="#">
-            <el-dropdown-item :disabled="!user.userInfo.is_admin"
-              >管理员身份</el-dropdown-item
+    <div class="right-navbar">
+      <LangSelect></LangSelect>
+      <el-dropdown class="right-menu">
+        <span class="el-dropdown-link">
+          <el-avatar shape="square" :size="30" fit="cover" :src="ava_url" />
+          <span>{{ user.userInfo.user_name }}</span>
+          <el-icon class="el-icon--right">
+            <Setting />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <router-link to="/">
+              <el-dropdown-item>首页</el-dropdown-item>
+            </router-link>
+            <el-dropdown-item @click="openChangePassword"
+              >修改密码</el-dropdown-item
             >
-          </router-link>
-          <el-dropdown-item divided @click="logout">退出登录</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+            <router-link to="#">
+              <el-dropdown-item :disabled="!user.userInfo.is_admin"
+                >管理员身份</el-dropdown-item
+              >
+            </router-link>
+            <el-dropdown-item divided @click="logout"
+              >退出登录</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+
     <!-- 修改密码框 -->
     <el-dialog v-model="dialogFormVisible" title="修改密码">
       <el-form :model="form" :rules="rules">
@@ -183,16 +190,18 @@ const submitPassword = () => {
       }
     }
   }
-  .right-menu {
-    float: right;
-    padding-right: 16px;
-    .el-dropdown-link {
-      cursor: pointer;
-      color: var(--el-color-primary);
-      display: flex;
-      align-items: flex-end;
-      span {
-        padding-left: 5px;
+  .right-navbar {
+    .right-menu {
+      float: right;
+      padding-right: 16px;
+      .el-dropdown-link {
+        cursor: pointer;
+        color: var(--el-color-primary);
+        display: flex;
+        align-items: flex-end;
+        span {
+          padding-left: 5px;
+        }
       }
     }
   }

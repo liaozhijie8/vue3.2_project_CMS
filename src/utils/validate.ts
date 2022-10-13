@@ -1,3 +1,9 @@
+/**
+ * 判断是否为外部资源
+ */
+export function isExternal(path: string) {
+  return /^(https?:|mailto:|tel:)/.test(path);
+}
 /* 弹出密码框验证 */
 export const validateNewPassword = (rule: any, value: any, callback: any) => {
   if (!value) {
