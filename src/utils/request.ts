@@ -15,7 +15,7 @@ service.interceptors.request.use(
       /* 前端判断token是否失效 */
       if (isTokenTimeout()) {
         // 超时，退出
-        user.logout();
+        user.logout("有效期过期,请重新登录");
         return Promise.reject(new Error("token失效"));
       }
       config.headers["Authorization"] = "Bearer " + user.user_token;
@@ -43,7 +43,7 @@ service.interceptors.response.use(
       const { code, message } = err.response.data;
       /* 检测后端token出错处理 */
       if (code === "10101") {
-        user.logout();
+        user.logout("请重新登录");
       }
       ElNotification.error(message);
       return Promise.reject(err.response.data);
