@@ -5,8 +5,8 @@
     @command="handleSetlanguage"
   >
     <div>
-      <el-tooltip content="国际化" placement="top">
-        <button>点击</button>
+      <el-tooltip :content="$t('msg.navBar.lang')" placement="top">
+        <svg-icon icon="language"></svg-icon>
       </el-tooltip>
     </div>
     <template #dropdown>
@@ -23,19 +23,20 @@
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
-import SvgIcon from "../SvgIcon/index.vue";
 import { useI18n } from "vue-i18n";
 import { appStore } from "@/stores";
 import { ElMessage } from "element-plus";
+
 const app = appStore();
 const i18n = useI18n();
+
 const handleSetlanguage = (val: string) => {
   // 切换语言
   i18n.locale.value = val;
   app.setLanguage(val);
-  ElMessage.success("修改成功");
+  ElMessage.success(i18n.t("msg.toast.switchLangSuccess"));
 };
-// 系统中的语言设定值
+// 设置浏览器缓存里面的语言标识
 const language = computed(() => {
   return app.language;
 });

@@ -1,5 +1,6 @@
 import { createApp } from "vue";
-import { createPinia } from "pinia";
+// 导入pinia
+import { store } from "./stores";
 // element ui
 import ElementPlus from "element-plus";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
@@ -20,7 +21,7 @@ import "virtual:svg-icons-register";
 
 const app = createApp(App);
 app.use(ElementPlus);
-app.use(createPinia());
+app.use(store);
 app.use(router);
 app.use(VueAxios, axios);
 app.use(i18n);

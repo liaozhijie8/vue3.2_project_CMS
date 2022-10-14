@@ -1,8 +1,6 @@
-import { TOKEN } from "@/constant";
 import axios from "axios";
 import { ElNotification } from "element-plus";
-import { getItem } from "./storage";
-import { userStore } from "@/stores/user";
+import { userStore } from "@/stores";
 import { isTokenTimeout } from "./auth";
 import type { LoginRes } from "@/interface/user_interface";
 const service = axios.create({
@@ -13,14 +11,14 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     const user = userStore();
-    if (getItem(TOKEN)) {
+    if (user.user_token) {
       /* 前端判断token是否失效 */
       if (isTokenTimeout()) {
         // 超时，退出
         user.logout();
         return Promise.reject(new Error("token失效"));
       }
-      config.headers["Authorization"] = "Bearer " + getItem(TOKEN);
+      config.headers["Authorization"] = "Bearer " + user.user_token;
     }
     return config;
   },

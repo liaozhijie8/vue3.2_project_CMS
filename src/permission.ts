@@ -1,14 +1,12 @@
 import router from "@/router";
-import { getItem } from "./utils/storage";
-import { TOKEN } from "@/constant";
-import { userStore } from "./stores/user";
+import { userStore, store } from "./stores";
 
+const user = userStore(store);
 /* 白名单 */
 const whiteList = ["/login"];
 router.beforeEach(async (to, from, next) => {
   //用户已登录，则不允许进入login
-  const user = userStore();
-  if (getItem(TOKEN)) {
+  if (user.user_token) {
     if (to.path === "/login") {
       next("/");
     } else {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { userStore } from "@/stores";
-import { ElMessage, ElNotification } from "element-plus";
+import { ElNotification } from "element-plus";
 import { validateNewPassword } from "@/utils/validate";
 import Hamburger from "../../components/hamburger/index.vue";
 import Breadcrumb from "../../components/breadcrumb/index.vue";
@@ -13,9 +13,8 @@ let ava_url = ref(
   "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
 );
 /* 退出登录 */
-const logout = () => {
-  user.logout();
-  ElMessage.success("退出成功");
+const logoutClick = () => {
+  user.logout("退出成功！");
 };
 /* 密码框设置 */
 const dialogFormVisible = ref(false);
@@ -62,13 +61,14 @@ const openChangePassword = () => {
 const is_loading = ref(false);
 const submitPassword = () => {
   const { originalPassword, newPassword, confirmPassword } = form;
-  if (originalPassword && newPassword && confirmPassword) {
+  if (originalPassword && newPassword === confirmPassword) {
     is_loading.value = true;
     user
       .changepas("修改密码", { originalPassword, newPassword })
       .then(() => {
         is_loading.value = false;
         dialogFormVisible.value = false;
+        user.logout("修改密码成功,请重新登录!");
       })
       .catch(() => {
         is_loading.value = false;
@@ -87,7 +87,7 @@ const submitPassword = () => {
     </div>
     <!-- 下拉信息框 -->
     <div class="right-navbar">
-      <LangSelect></LangSelect>
+      <LangSelect class="right-menu-item hover-effect"></LangSelect>
       <el-dropdown class="right-menu">
         <span class="el-dropdown-link">
           <el-avatar shape="square" :size="30" fit="cover" :src="ava_url" />
@@ -99,7 +99,7 @@ const submitPassword = () => {
         <template #dropdown>
           <el-dropdown-menu>
             <router-link to="/">
-              <el-dropdown-item>首页</el-dropdown-item>
+              <el-dropdown-item>{{ $t("msg.navBar.home") }}</el-dropdown-item>
             </router-link>
             <el-dropdown-item @click="openChangePassword"
               >修改密码</el-dropdown-item
@@ -109,9 +109,9 @@ const submitPassword = () => {
                 >管理员身份</el-dropdown-item
               >
             </router-link>
-            <el-dropdown-item divided @click="logout"
-              >退出登录</el-dropdown-item
-            >
+            <el-dropdown-item divided @click="logoutClick">{{
+              $t("msg.navBar.logout")
+            }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -177,28 +177,46 @@ const submitPassword = () => {
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   height: 50px;
+
   .left-navbar {
     display: flex;
     align-items: center;
+
     .hamburger {
       height: 100%;
       padding: 0 10px;
       cursor: pointer;
       transition: background 0.5;
+
       &:hover {
         background: rgba(221, 224, 225, 0.08);
       }
     }
   }
+
   .right-navbar {
+    display: flex;
+    align-items: center;
+
+    .right-menu-item {
+      padding: 0 18px 0 0;
+      font-size: 24px;
+      color: #5a5e66;
+
+      &.hover-effect {
+        cursor: pointer;
+      }
+    }
+
     .right-menu {
-      float: right;
       padding-right: 16px;
+
       .el-dropdown-link {
         cursor: pointer;
         color: var(--el-color-primary);
         display: flex;
         align-items: flex-end;
+
         span {
           padding-left: 5px;
         }
@@ -206,10 +224,12 @@ const submitPassword = () => {
     }
   }
 }
+
 /* 密码框样式 */
 .el-input {
   width: 300px;
 }
+
 .dialog-footer button:first-child {
   margin-right: 10px;
 }

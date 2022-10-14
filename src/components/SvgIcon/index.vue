@@ -1,36 +1,60 @@
 <template>
-  <svg aria-hidden="true" class="svg-icon">
-    <use :xlink:href="symbolId" :fill="color" />
+  <div
+    v-if="isExternal"
+    :style="styleExternalIcon"
+    class="svg-external-icon svg-icon"
+    :class="className"
+  ></div>
+  <svg v-else class="svg-icon" :class="className" aria-hidden="true">
+    <use :xlink:href="iconName" />
   </svg>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
+import { isExternal as external } from "@/utils/validate";
 import { computed } from "vue";
 const props = defineProps({
-  // icon path name
-  name: {
+  // icon 图标
+  icon: {
     type: String,
-    default: "",
     required: true,
   },
-  prefix: {
+  // 图标类名
+  className: {
     type: String,
-    default: "icon",
-  },
-  color: {
-    type: String,
-    default: "#373C43",
+    default: "",
   },
 });
 
-const symbolId = computed(() => `#${props.prefix}-${props.name}`);
+/**
+ * 判断是否为外部图标
+ */
+const isExternal = computed(() => external(props.icon));
+/**
+ * 外部图标样式
+ */
+const styleExternalIcon = computed(() => ({
+  mask: `url(${props.icon}) no-repeat 50% 50%`,
+  "-webkit-mask": `url(${props.icon}) no-repeat 50% 50%`,
+}));
+/**
+ * 项目内图标
+ */
+const iconName = computed(() => `#icon-${props.icon}`);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .svg-icon {
-  width: 16px;
-  height: 16px;
-  color: #f90;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
   fill: currentColor;
+  overflow: hidden;
+}
+
+.svg-external-icon {
+  background-color: currentColor;
+  mask-size: cover !important;
+  display: inline-block;
 }
 </style>

@@ -1,21 +1,24 @@
 import { createI18n } from "vue-i18n";
+import zhLocale from "./language/zh";
+import enLocale from "./language/en";
+import { appStore, store } from "@/stores";
+const locale = appStore(store).language;
 const messages = {
   en: {
     msg: {
-      test: "hello world",
+      ...enLocale,
     },
   },
   zh: {
     msg: {
-      test: "你好世界",
+      ...zhLocale,
     },
   },
 };
 
-const locale = "zh";
-
 const i18n = createI18n({
   // 使用composition API需要关掉
+  warnHtmlMessage: false,
   legacy: false,
   // 全局注入$t函数
   globalInjection: true,

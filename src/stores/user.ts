@@ -50,12 +50,13 @@ export const userStore = defineStore("user", () => {
     return JSON.stringify(userInfo.value) !== "{}";
   });
   /* 退出登录 */
-  const logout = () => {
+  const logout = (content: string) => {
     removeAllItem();
     cleanToken();
     userInfo.value = "";
     // TODO: 清理权限
     router.push("/login");
+    ElMessage.success(content);
   };
   /* 修改用户密码 */
   const changepas = async (content: any, palyload: ChangePassword) => {
