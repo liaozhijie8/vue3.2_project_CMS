@@ -81,7 +81,6 @@ watch(temp, () => {
     return generateRoutes(filterRoutes);
   });
   initFuse(searchPool.value);
-  console.log(searchPool.value);
 });
 // el-select 实例
 const headerSearchSelectRef = ref(null);
@@ -96,7 +95,6 @@ const onShowClick = () => {
 };
 /* input失去焦点 */
 const closeCursor = () => {
-  console.log(headerSearchSelectRef.value);
   if (isShow.value && !search.value) {
     setTimeout(() => {
       // 关闭搜索栏并清空检索文字
@@ -109,7 +107,6 @@ const closeCursor = () => {
 /* 选中时的触发回调 */
 const onSelectChange = (val: string) => {
   router.push(val.path);
-  console.log(search.value);
 };
 
 /* 搜索的数据 */
