@@ -2,7 +2,7 @@
   <el-icon>
     <component :is="icon"></component>
   </el-icon>
-  <span>{{ title }}</span>
+  <span>{{ $t(`msg.route.${title}`) }}</span>
 </template>
 <script setup lang="ts">
 import { defineProps } from "vue";

@@ -7,11 +7,11 @@
       >
         <!-- 不可点击 -->
         <span class="no-redirect" v-if="index === breadcrumbData.length - 1">{{
-          item.meta.title
+          $t(`msg.route.${item.meta.title}`)
         }}</span>
         <!-- 可点击 -->
         <span class="redirect" v-else @click="onLink(item)">{{
-          item.meta.title
+          $t(`msg.route.${item.meta.title}`)
         }}</span>
       </el-breadcrumb-item>
     </transition-group>

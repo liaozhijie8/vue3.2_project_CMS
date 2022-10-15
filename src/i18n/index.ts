@@ -1,7 +1,9 @@
 import { createI18n } from "vue-i18n";
 import zhLocale from "./language/zh";
 import enLocale from "./language/en";
-import { appStore, store } from "@/stores";
+import { appStore } from "@/stores";
+import { createPinia } from "pinia";
+const store = createPinia();
 const locale = appStore(store).language;
 const messages = {
   en: {
