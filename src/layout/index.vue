@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar.vue";
 import Sidebar from "./components/sidebar/index.vue";
 import Appmain from "./components/Appmain.vue";
 import { appStore, colorStore } from "@/stores";
+import TagsView from "../components/tagsView/index.vue";
 const app = appStore();
 const color = colorStore();
 </script>
@@ -18,6 +19,7 @@ const color = colorStore();
       <!-- 顶部navbar -->
       <div class="fixed-header">
         <Navbar></Navbar>
+        <TagsView></TagsView>
       </div>
       <!-- 内容区 -->
       <Appmain></Appmain>
