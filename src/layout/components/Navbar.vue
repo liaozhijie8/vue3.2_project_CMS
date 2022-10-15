@@ -7,6 +7,7 @@ import Hamburger from "../../components/hamburger/index.vue";
 import Breadcrumb from "../../components/breadcrumb/index.vue";
 import LangSelect from "../../components/langSelect/index.vue";
 import ThemeSelect from "../../components/themeSelect/index.vue";
+import Screenfull from "../../components/screenfull/index.vue";
 const user = userStore();
 
 /* dropdown栏数据设置 */
@@ -86,8 +87,9 @@ const submitPassword = () => {
       <Hamburger class="hamburger"></Hamburger>
       <Breadcrumb></Breadcrumb>
     </div>
-    <!-- 下拉信息框 -->
+    <!-- nav后半部分 -->
     <div class="right-navbar">
+      <Screenfull class="right-menu-item hover-effect"></Screenfull>
       <ThemeSelect></ThemeSelect>
       <LangSelect class="right-menu-item hover-effect"></LangSelect>
       <el-dropdown class="right-menu">

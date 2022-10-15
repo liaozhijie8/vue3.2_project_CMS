@@ -6,6 +6,7 @@ import { getItem } from "@/utils/storage";
 import { MAIN_COLOR } from "@/constant";
 
 export const colorStore = defineStore("color", () => {
+  // 颜色对象合并(成员属性相同)
   const commonColor = computed(() => {
     return {
       ...themeStore().colorVariables,
