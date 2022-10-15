@@ -22,9 +22,10 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref, defineEmits, computed } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { themeStore } from "@/stores";
+import { generateNewStyle, writeNewStyle } from "@/utils/theme";
 const i18n = useI18n();
 const tips = computed(() => {
   return i18n.t("msg.theme.themeChange");
@@ -43,10 +44,14 @@ const emits = defineEmits(["update:modelValue"]);
 const mColor = ref(theme.mainColor);
 
 const closedClick = () => {
-  theme.setThemeColor(mColor.value);
   emits("update:modelValue", false);
 };
-const confirmClick = () => {
+const confirmClick = async () => {
+  theme.setThemeColor(mColor.value);
+  // 给颜色标记
+  const newStyle = await generateNewStyle(mColor.value);
+  // 重写css样式
+  writeNewStyle(newStyle);
   closedClick();
 };
 </script>

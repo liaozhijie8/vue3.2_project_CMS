@@ -1,9 +1,17 @@
-import { ref } from "vue";
+import { computed } from "vue";
 import { defineStore } from "pinia";
-import variables from "@/styles/variables.module.scss";
+import { themeStore } from "./theme";
+import { generateColors } from "@/utils/theme";
+import { getItem } from "@/utils/storage";
+import { MAIN_COLOR } from "@/constant";
 
 export const colorStore = defineStore("color", () => {
-  const commonColor = ref(variables);
+  const commonColor = computed(() => {
+    return {
+      ...themeStore().colorVariables,
+      ...generateColors(getItem(MAIN_COLOR)),
+    };
+  });
 
   return { commonColor };
 });

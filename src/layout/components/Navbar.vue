@@ -19,7 +19,7 @@ const logoutClick = () => {
 };
 /* 密码框设置 */
 const dialogFormVisible = ref(false);
-const formLabelWidth = "100px";
+const formLabelWidth = "80px";
 const form = reactive({
   originalPassword: "",
   newPassword: "",
@@ -120,7 +120,7 @@ const submitPassword = () => {
     </div>
 
     <!-- 修改密码框 -->
-    <el-dialog v-model="dialogFormVisible" title="修改密码">
+    <el-dialog v-model="dialogFormVisible" title="修改密码" width="30%">
       <el-form :model="form" :rules="rules">
         <el-form-item
           label="原始密码"

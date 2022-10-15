@@ -2,16 +2,16 @@
 import Navbar from "./components/Navbar.vue";
 import Sidebar from "./components/sidebar/index.vue";
 import Appmain from "./components/Appmain.vue";
-import variables from "@/styles/variables.module.scss";
-import { appStore } from "@/stores/app";
+import { appStore, colorStore } from "@/stores";
 const app = appStore();
+const color = colorStore();
 </script>
 <template>
   <div class="app-wrapper" :class="{ hideSidebar: app.sidebarOpened }">
     <!-- 左侧menu -->
     <Sidebar
       class="sidebar-container"
-      :style="{ backgroundColor: variables.menuBg }"
+      :style="{ backgroundColor: color.commonColor.menuBg }"
     ></Sidebar>
     <!-- 右侧 -->
     <div class="main-container">
