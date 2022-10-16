@@ -16,8 +16,10 @@
       <RouterLink :to="tag.path" class="tags-view-item">
         {{ tag.title }}
       </RouterLink>
-      <div class="tag-icon tag-close" @click.prevent="onCloseClicke(index)">
-        <el-icon size="10px" v-show="!isActice(tag)"><Close /></el-icon>
+      <div class="tag-icon" @click.prevent="onCloseClicke(index)">
+        <el-icon size="10px" class="tag-close" v-show="!isActice(tag)"
+          ><Close
+        /></el-icon>
       </div>
     </div>
   </div>
@@ -30,7 +32,7 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { appStore, colorStore } from "@/stores";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import ContextMenu from "./contextMenu.vue";
 const color = colorStore();
 const route = useRoute();
@@ -40,7 +42,10 @@ const isActice = (tag) => {
 };
 /* 关闭tag */
 const onCloseClicke = (index) => {
-  console.log(index);
+  app.removeTagsView({
+    type: "index",
+    index,
+  });
 };
 /* 鼠标右键行为 */
 const is_openMenu = ref(false);
@@ -56,6 +61,17 @@ const openMenu = (e, index) => {
   menuPosition.value.left = x + "px";
   menuPosition.value.top = y + "px";
 };
+/* 关闭menu菜单 */
+const closeMenu = () => {
+  is_openMenu.value = false;
+};
+watch(is_openMenu, (val) => {
+  if (val) {
+    document.body.addEventListener("click", closeMenu);
+  } else {
+    document.body.removeEventListener("click", closeMenu);
+  }
+});
 </script>
 <style scoped lang="scss">
 .tags-view-container {
@@ -87,9 +103,12 @@ const openMenu = (e, index) => {
       align-items: center;
     }
     .tag-close {
+      width: 15px;
+      height: 15px;
+      border-radius: 15px;
       &:hover {
         cursor: pointer;
-        background-color: bisque;
+        background-color: rgb(226, 222, 222);
       }
     }
     .tags-view-item {

@@ -6,15 +6,33 @@
   </ul>
 </template>
 <script setup lang="ts">
-defineProps({
+import { useRouter } from "vue-router";
+import { appStore } from "@/stores";
+const props = defineProps({
   index: {
     type: Number,
     required: true,
   },
 });
-const onRefreshClick = () => {};
-const onCloseRightClick = () => {};
-const onCloseOtherClick = () => {};
+const router = useRouter();
+/* 按钮操作 */
+const app = appStore();
+const onRefreshClick = () => {
+  router.go(0);
+};
+// 关闭右侧
+const onCloseRightClick = () => {
+  app.removeTagsView({
+    type: "right",
+    index: props.index,
+  });
+};
+const onCloseOtherClick = () => {
+  app.removeTagsView({
+    type: "other",
+    index: props.index,
+  });
+};
 </script>
 <style scoped lang="scss">
 .context-menu-container {

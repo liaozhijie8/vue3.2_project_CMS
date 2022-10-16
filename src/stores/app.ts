@@ -33,6 +33,20 @@ export const appStore = defineStore("app", () => {
     tagsViewList.value[index] = tag;
     setItem(TAGS_VIEW, tagsViewList.value);
   }
+  // 删除tag
+  function removeTagsView(palyload) {
+    const { index, type } = palyload;
+    const length = tagsViewList.value.length;
+    if (type === "index") {
+      tagsViewList.value.splice(index, 1);
+    } else if (type === "other") {
+      tagsViewList.value.splice(index + 1, length - index - 1);
+      tagsViewList.value.splice(0, index);
+    } else if (type === "right") {
+      tagsViewList.value.splice(index + 1, length - index - 1);
+    }
+    setItem(TAGS_VIEW, tagsViewList.value);
+  }
 
   return {
     sidebarOpened,
@@ -42,5 +56,6 @@ export const appStore = defineStore("app", () => {
     addTagsViewList,
     tagsViewList,
     changeTagsView,
+    removeTagsView,
   };
 });
