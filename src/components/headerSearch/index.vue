@@ -4,6 +4,7 @@
       class-name="search-icon"
       icon="search"
       @click.stop="onShowClick"
+      id="guide-search"
     ></svg-icon>
     <el-select
       ref="headerSearchSelectRef"

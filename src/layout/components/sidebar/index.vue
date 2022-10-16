@@ -10,7 +10,7 @@ let ava_url = ref(
 );
 </script>
 <template>
-  <div class="sidebar">
+  <div class="sidebar" id="guide-sidebar">
     <div class="logo-container" :class="{ hideSidebar: app.sidebarOpened }">
       <el-avatar
         shape="square"

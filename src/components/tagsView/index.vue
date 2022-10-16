@@ -1,5 +1,5 @@
 <template>
-  <div class="tags-view-container">
+  <div class="tags-view-container" id="guide-tags">
     <div
       class="tag-box"
       v-for="(tag, index) in app.tagsViewList"
