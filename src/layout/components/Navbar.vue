@@ -9,6 +9,7 @@ import LangSelect from "../../components/langSelect/index.vue";
 import ThemeSelect from "../../components/themeSelect/index.vue";
 import Screenfull from "../../components/screenfull/index.vue";
 import HeaderSearch from "../../components/headerSearch/index.vue";
+import Guide from "../../components/guide/index.vue";
 const user = userStore();
 
 /* dropdown栏数据设置 */
@@ -90,6 +91,7 @@ const submitPassword = () => {
     </div>
     <!-- nav后半部分 -->
     <div class="right-navbar">
+      <Guide class="right-menu-item hover-effect"></Guide>
       <HeaderSearch class="right-menu-item hover-effect"></HeaderSearch>
       <Screenfull class="right-menu-item hover-effect"></Screenfull>
       <ThemeSelect></ThemeSelect>
@@ -180,7 +182,6 @@ const submitPassword = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   height: 50px;
 

@@ -43,6 +43,7 @@ const color = colorStore();
   z-index: 9;
   width: calc(100% - #{$sideBarWidth});
   transition: width $sideBarDuration;
+  background-color: #fff;
 }
 .hideSidebar .fixed-header {
   width: calc(100% - #{$hideSideBarWidth});

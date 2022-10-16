@@ -1,6 +1,12 @@
 <template>
   <div class="app-main">
-    <router-view></router-view>
+    <router-view v-slot="{ Component, route }">
+      <transition name="fade-transform" mode="out-in">
+        <keep-alive>
+          <component :is="Component" :key="route.path"></component>
+        </keep-alive>
+      </transition>
+    </router-view>
   </div>
 </template>
 <script setup lang="ts">
@@ -48,6 +54,7 @@ const temp = computed(() => {
 });
 watch(temp, () => {
   app.tagsViewList.forEach((route, index) => {
+    // 改变title
     app.changeTagsView({
       index,
       tag: {
@@ -60,12 +67,14 @@ watch(temp, () => {
 </script>
 <style scoped lang="scss">
 .app-main {
+  z-index: 0;
+  height: 2000px;
   margin-top: 50px;
-  min-height: calc(100vh - 50px);
+  min-height: 100vh;
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 61px 20px 20px 20px;
+  padding: 80px 20px 20px 20px;
   box-sizing: border-box;
 }
 </style>
