@@ -28,6 +28,11 @@ export const appStore = defineStore("app", () => {
       setItem(TAGS_VIEW, tagsViewList.value);
     }
   }
+  // 修改指定index的title
+  function changeTagsView({ index, tag }) {
+    tagsViewList.value[index] = tag;
+    setItem(TAGS_VIEW, tagsViewList.value);
+  }
 
   return {
     sidebarOpened,
@@ -36,5 +41,6 @@ export const appStore = defineStore("app", () => {
     setLanguage,
     addTagsViewList,
     tagsViewList,
+    changeTagsView,
   };
 });

@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { watch } from "vue";
+import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { isTags } from "@/utils/tags";
 import { appStore } from "@/stores";
@@ -22,6 +22,7 @@ const getTitle = (route) => {
   }
   return title;
 };
+/* 监听路由变化 */
 watch(
   route,
   (to, from) => {
@@ -41,9 +42,25 @@ watch(
     immediate: true,
   }
 );
+/* 监听语言变化 */
+const temp = computed(() => {
+  return app.language;
+});
+watch(temp, () => {
+  app.tagsViewList.forEach((route, index) => {
+    app.changeTagsView({
+      index,
+      tag: {
+        ...route,
+        title: getTitle(route),
+      },
+    });
+  });
+});
 </script>
 <style scoped lang="scss">
 .app-main {
+  margin-top: 50px;
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
