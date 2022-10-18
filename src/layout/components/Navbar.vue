@@ -164,12 +164,14 @@ const submitPassword = () => {
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button @click="dialogFormVisible = false">{{
+            $t("msg.universal.cancel")
+          }}</el-button>
           <el-button
             type="primary"
             :loading="is_loading"
             @click="submitPassword"
-            >Confirm</el-button
+            >{{ $t("msg.universal.confirm") }}</el-button
           >
         </span>
       </template>

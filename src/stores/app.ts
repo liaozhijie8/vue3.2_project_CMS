@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { LANG, TAGS_VIEW } from "@/constant";
 import { getItem, setItem } from "@/utils/storage";
@@ -8,6 +8,10 @@ export const appStore = defineStore("app", () => {
   const sidebarOpened = ref(false);
   /* 设置语言 */
   const language = ref(getItem(LANG) || "zh");
+  // 监视语言的改变(外部似乎没用，暂时测试结果)
+  const languageState = computed(() => {
+    return language.value;
+  });
   function triggerSidebarOpened() {
     sidebarOpened.value = !sidebarOpened.value;
   }
@@ -57,5 +61,6 @@ export const appStore = defineStore("app", () => {
     tagsViewList,
     changeTagsView,
     removeTagsView,
+    languageState,
   };
 });
