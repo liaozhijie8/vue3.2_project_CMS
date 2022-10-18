@@ -32,7 +32,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       isLoading.value = true;
       counter
-        .login_set("user/login", {
+        .login_set({
           user_name: ruleForm.username,
           password: ruleForm.password,
         })

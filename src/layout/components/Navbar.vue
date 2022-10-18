@@ -68,7 +68,7 @@ const submitPassword = () => {
   if (originalPassword && newPassword === confirmPassword) {
     is_loading.value = true;
     user
-      .changepas("修改密码", { originalPassword, newPassword })
+      .changepas({ originalPassword, newPassword })
       .then(() => {
         is_loading.value = false;
         dialogFormVisible.value = false;

@@ -1,10 +1,10 @@
 export interface UserInfo {
-  id: number;
-  user_name: string;
-  is_admin: boolean;
+  id?: number;
+  user_name?: string;
+  is_admin?: boolean;
 }
 export interface LoginRes {
-  result: string;
+  result: object;
   message: string;
 }
 

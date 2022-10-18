@@ -16,7 +16,7 @@ export const userStore = defineStore("user", () => {
   function cleanToken() {
     user_token.value = "";
   }
-  function login_set(content: any, palyload: Login) {
+  function login_set(palyload: Login) {
     const { user_name, password } = palyload;
     return new Promise((resolve, reject) => {
       login({
@@ -28,7 +28,7 @@ export const userStore = defineStore("user", () => {
           user_token.value = token;
           setItem(TOKEN, token);
           // 获取用户信息
-          getProfile("登录时获取");
+          getProfile();
           // 保存登录时间
           setTimeStamp();
           router.push("/");
@@ -42,7 +42,7 @@ export const userStore = defineStore("user", () => {
   }
   /* 获取用户信息 */
   const userInfo = ref({});
-  async function getProfile(content: any) {
+  async function getProfile() {
     const { result } = await profile();
     userInfo.value = result;
   }
@@ -59,7 +59,7 @@ export const userStore = defineStore("user", () => {
     ElMessage.success(content);
   };
   /* 修改用户密码 */
-  const changepas = async (content: any, palyload: ChangePassword) => {
+  const changepas = async (palyload: ChangePassword) => {
     const { newPassword, originalPassword } = palyload;
     return await changePassword({
       newPassword: md5(newPassword),
