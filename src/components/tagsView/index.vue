@@ -5,9 +5,9 @@
       v-for="(tag, index) in app.tagsViewList"
       :key="tag.fullpath"
       :style="{
-        backgroundColor: isActice(tag) ? color.commonColor.menuBg : '',
         borderColor: isActice(tag) ? color.commonColor.menuBg : '',
       }"
+      :class="isActice(tag) ? 'actice' : ''"
       @contextmenu.prevent="openMenu($event, index)"
     >
       <div class="tag-icon">
@@ -81,16 +81,19 @@ watch(is_openMenu, (val) => {
   width: 100%;
   line-height: 50px;
   padding: 5px;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-
+  // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  .actice {
+    color: var(--el-color-primary);
+  }
   .tag-box {
     display: flex;
     align-items: center;
     height: 70%;
+    font-size: 14px;
     min-width: 100px;
     margin-left: 10px;
     border-radius: 2px;
-    border: 1px solid #000;
+    box-shadow: var(--el-box-shadow-light);
     &:hover {
       background-color: rgb(239, 242, 244);
     }

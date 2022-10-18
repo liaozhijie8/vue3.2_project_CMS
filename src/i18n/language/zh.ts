@@ -103,6 +103,11 @@ export default {
     Introduction:
       "高级技术专家，曾就职于国内一线互联网公司，统筹过的多个大型项目用户数已过千万级。致力于研究大前端技术，多次受邀参加国内前端技术分享会，如：2018 年 Google 中国技术分享会。",
   },
+  tabs: {
+    onsale: "在售商品",
+    turnover: "销量",
+    account: "会员管理",
+  },
   userInfo: {
     print: "打印",
     title: "员工信息",

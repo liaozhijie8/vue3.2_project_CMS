@@ -44,6 +44,7 @@ const color = colorStore();
   width: calc(100% - #{$sideBarWidth});
   transition: width $sideBarDuration;
   background-color: #fff;
+  box-shadow: var(--el-box-shadow-light);
 }
 .hideSidebar .fixed-header {
   width: calc(100% - #{$hideSideBarWidth});

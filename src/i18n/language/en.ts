@@ -104,6 +104,11 @@ export default {
     Introduction:
       "A senior technical expert, once worked in a domestic first-line Internet company, and has coordinated multiple large-scale projects with more than tens of millions of users. Committed to researching big front-end technology, he has been invited to participate in domestic front-end technology sharing sessions many times, such as: Google China Technology Sharing Session in 2018.",
   },
+  tabs: {
+    onsale: "Onsale",
+    turnover: "Turnover",
+    account: "Account",
+  },
   userInfo: {
     print: "Print",
     title: "Employee information",
