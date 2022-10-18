@@ -13,3 +13,8 @@ export interface ChangePassword {
   originalPassword: string;
   newPassword: string;
 }
+/* 登录信息 */
+export interface Login {
+  user_name: string;
+  password: string;
+}
