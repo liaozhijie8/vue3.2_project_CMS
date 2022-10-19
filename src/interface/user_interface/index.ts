@@ -18,3 +18,8 @@ export interface Login {
   user_name: string;
   password: string;
 }
+/* 分页数据 */
+export interface Page {
+  pageNum: number;
+  pageSize: number;
+}

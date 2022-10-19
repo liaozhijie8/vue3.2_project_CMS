@@ -1,10 +1,10 @@
-import type { ChangePassword } from "@/interface/user_interface";
+import type { ChangePassword, Page, Login } from "@/interface/user_interface";
 import request from "@/utils/request";
 
 /*
  * 登录请求
  */
-export const login = (data: any) => {
+export const login = (data: Login) => {
   return request({
     url: "/login",
     method: "POST",
@@ -28,5 +28,13 @@ export const changePassword = (data: ChangePassword) => {
     url: "/change",
     method: "PATCH",
     data,
+  });
+};
+/* 获取用户列表 */
+export const getUserlist = (params: Page) => {
+  return request({
+    url: "/list",
+    method: "GET",
+    params,
   });
 };

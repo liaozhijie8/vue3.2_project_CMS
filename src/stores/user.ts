@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import md5 from "md5";
-import { changePassword, login, profile } from "@/api/user";
+import { changePassword, login, profile, getUserlist } from "@/api/user";
 import { TOKEN } from "@/constant";
 import { setItem, getItem, removeAllItem } from "@/utils/storage";
 import router from "@/router";
@@ -66,6 +66,21 @@ export const userStore = defineStore("user", () => {
       originalPassword: md5(originalPassword),
     });
   };
+  /* 获取用户列表 */
+  const userList = ref({});
+  const userCount = ref();
+  const pageNum = ref();
+  const pageSize = ref();
+  async function getUser_list(palyload: number) {
+    const { result } = await getUserlist({ pageNum: palyload, pageSize: 10 });
+    userList.value = result.list;
+    userCount.value = result.total;
+    pageNum.value = result.pageNum;
+    pageSize.value = result.pageSize;
+  }
+  const hasUserlist = computed(() => {
+    return JSON.stringify(userList.value) !== "{}";
+  });
 
   return {
     login_set,
@@ -76,5 +91,11 @@ export const userStore = defineStore("user", () => {
     hasUserInfo,
     logout,
     changepas,
+    getUser_list,
+    hasUserlist,
+    userList,
+    userCount,
+    pageNum,
+    pageSize,
   };
 });

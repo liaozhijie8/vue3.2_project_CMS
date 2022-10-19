@@ -11,7 +11,10 @@ router.beforeEach(async (to, from, next) => {
       next("/");
     } else {
       if (!user.hasUserInfo) {
-        await user.getProfile("获取个人信息");
+        await user.getProfile();
+      }
+      if (!user.hasUserlist) {
+        await user.getUser_list(user.pageNum);
       }
       next();
     }

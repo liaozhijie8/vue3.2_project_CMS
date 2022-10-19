@@ -68,7 +68,6 @@ watch(temp, () => {
 <style scoped lang="scss">
 .app-main {
   z-index: 0;
-  height: 2000px;
   margin-top: 50px;
   min-height: 100vh;
   width: 100%;
