@@ -1,8 +1,20 @@
 <template>
   <div class="account-container">
     <div class="bnt-container">
-      <el-button type="success" :icon="Refresh">恢复账户</el-button>
-      <el-button type="danger" :icon="Delete">禁用账户</el-button>
+      <el-button
+        type="success"
+        :icon="Refresh"
+        @click="restoreClick"
+        :disabled="multipleSelection.length == 0"
+        >恢复账户</el-button
+      >
+      <el-button
+        type="danger"
+        :icon="Delete"
+        @click="removeClick"
+        :disabled="multipleSelection.length == 0"
+        >禁用账户</el-button
+      >
     </div>
     <el-table
       ref="multipleTableRef"
@@ -19,9 +31,11 @@
         }}</template>
       </el-table-column>
       <el-table-column label="用户状态" :min-width="width">
-        <template #default="scope">{{
-          scope.row.deletedAt ? "销户" : "正常"
-        }}</template>
+        <template #default="scope">
+          <p :style="{ color: scope.row.deletedAt ? red : green }">
+            {{ scope.row.deletedAt ? "销户" : "正常" }}
+          </p>
+        </template>
       </el-table-column>
       <el-table-column
         label="注册时间"
@@ -33,10 +47,11 @@
       </el-table-column>
       <el-table-column
         label="销户时间"
+        property="deletedAt"
         show-overflow-tooltip
+        :formatter="dateFormat"
         :min-width="width"
       >
-        <template #default="scope">{{ scope.row.deletedAt }}</template>
       </el-table-column>
     </el-table>
     <div class="pagination-container">
@@ -58,15 +73,9 @@ import { ElTable } from "element-plus";
 import { Refresh, Delete } from "@element-plus/icons-vue";
 import { userStore } from "@/stores";
 import dayjs from "dayjs";
-interface User {
-  id: number;
-  user_name: string;
-  is_admin: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-}
-
+import type { User } from "@/interface/user_interface";
+const red = ref("#F56C6C");
+const green = ref("#67C23A");
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<User[]>([]);
 const handleSelectionChange = (val: User[]) => {
@@ -77,15 +86,15 @@ const width = ref(30);
 const user = userStore();
 const pageSize = Number(user.pageSize);
 const total = Number(user.userCount);
-const tableData: User[] = computed(() => {
+let tableData: User[] = computed(() => {
   return user.userList;
 });
 // 格式化时间
-const dateFormat = (row) => {
-  var date = row.createdAt;
-  if (date === undefined) {
-    return "";
+const dateFormat = (row, val) => {
+  if (row[val.property] === null) {
+    return "0";
   }
+  var date = row[val.property];
   return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 };
 /* 点击页码变化 */
@@ -93,6 +102,17 @@ const currentPage = ref();
 // 重新获取数据
 const currentEvent = () => {
   user.getUser_list(currentPage.value);
+};
+/* 用户注销与恢复 */
+const removeClick = () => {
+  multipleSelection.value.forEach((item) => {
+    user.remove_user(item.id);
+  });
+};
+const restoreClick = () => {
+  multipleSelection.value.forEach((item) => {
+    user.restore_user(item.id);
+  });
 };
 </script>
 

@@ -38,3 +38,17 @@ export const getUserlist = (params: Page) => {
     params,
   });
 };
+/* 删除用户 */
+export const removeUser = (data: number) => {
+  return request({
+    url: `/remove/${data}`,
+    method: "POST",
+  });
+};
+/* 恢复用户 */
+export const restoreUser = (data: number) => {
+  return request({
+    url: `/restore/${data}`,
+    method: "POST",
+  });
+};

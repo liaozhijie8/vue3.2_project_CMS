@@ -17,7 +17,9 @@
       <!-- 姓名 && 角色 -->
       <div class="box-center">
         <div class="user-name text-center">{{ user.userInfo.user_name }}</div>
-        <div class="user-role text-center text-muted">超级管理员</div>
+        <div class="user-role text-center text-muted">
+          {{ user.userInfo.is_admin ? "超级管理员" : "会员" }}
+        </div>
       </div>
     </div>
   </el-card>

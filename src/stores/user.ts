@@ -1,7 +1,14 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import md5 from "md5";
-import { changePassword, login, profile, getUserlist } from "@/api/user";
+import {
+  changePassword,
+  login,
+  profile,
+  getUserlist,
+  removeUser,
+  restoreUser,
+} from "@/api/user";
 import { TOKEN } from "@/constant";
 import { setItem, getItem, removeAllItem } from "@/utils/storage";
 import router from "@/router";
@@ -81,6 +88,32 @@ export const userStore = defineStore("user", () => {
   const hasUserlist = computed(() => {
     return JSON.stringify(userList.value) !== "{}";
   });
+  /* 删除用户 */
+  function remove_user(palyload: number) {
+    return new Promise((resolve, rejects) => {
+      removeUser(palyload)
+        .then((res) => {
+          getUser_list(pageNum.value);
+          resolve(res);
+        })
+        .catch((err) => {
+          rejects(err);
+        });
+    });
+  }
+  /* 恢复用户 */
+  function restore_user(palyload: number) {
+    return new Promise((resolve, rejects) => {
+      restoreUser(palyload)
+        .then((res) => {
+          getUser_list(pageNum.value);
+          resolve(res);
+        })
+        .catch((err) => {
+          rejects(err);
+        });
+    });
+  }
 
   return {
     login_set,
@@ -97,5 +130,7 @@ export const userStore = defineStore("user", () => {
     userCount,
     pageNum,
     pageSize,
+    remove_user,
+    restore_user,
   };
 });

@@ -23,3 +23,19 @@ export interface Page {
   pageNum: number;
   pageSize: number;
 }
+/* 用户列表信息 */
+export interface User {
+  id: number;
+  user_name: string;
+  is_admin: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
+/* 列表返回类型 */
+export interface List {
+  pageNum: string;
+  pageSize: string;
+  total: number;
+}
