@@ -12,7 +12,7 @@ export interface GoodsList {
 /* 上传商品信息 */
 export interface CreateGoods {
   goods_name: string;
-  goods_price: number;
-  goods_num: number;
+  goods_price: number | string;
+  goods_num: number | string;
   goods_img: string;
 }

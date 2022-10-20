@@ -1,8 +1,14 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import { goodsList, goodsOff, goodsOn, createGoods } from "@/api/goods";
+import {
+  goodsList,
+  goodsOff,
+  goodsOn,
+  createGoods,
+  updateGoods,
+} from "@/api/goods";
 import { ElMessage } from "element-plus";
-import type { GoodsList } from "@/interface/goods_interface";
+import type { CreateGoods, GoodsList } from "@/interface/goods_interface";
 
 export const goodsStore = defineStore("goods", () => {
   /* 获取商品列表 */
@@ -56,7 +62,7 @@ export const goodsStore = defineStore("goods", () => {
     });
   }
   /* 上传商品 */
-  function importGoods(palyload: GoodsList, isMore: boolean) {
+  function importGoods(palyload: CreateGoods, isMore: boolean) {
     return new Promise((resolve, reject) => {
       createGoods(palyload)
         .then((res) => {
@@ -73,6 +79,32 @@ export const goodsStore = defineStore("goods", () => {
         });
     });
   }
+  /* 跳转修改页携带的参数 */
+  const updateGoodsInfo = ref({});
+  // 填入参数
+  function injectInfo(palyload: GoodsList) {
+    updateGoodsInfo.value = palyload;
+  }
+  // 清空参数
+  function removeInfo() {
+    updateGoodsInfo.value = {};
+  }
+  /* 修改商品信息 */
+  function setUpdateGoods(palyload) {
+    const { id, ...res } = palyload;
+    return new Promise((resolve, rejects) => {
+      updateGoods(id, res)
+        .then((res) => {
+          ElMessage.success(res.message);
+          removeInfo();
+          updateDate();
+          resolve(res);
+        })
+        .catch((err) => {
+          rejects(err);
+        });
+    });
+  }
   return {
     getGoods_list,
     hasGoodslist,
@@ -84,5 +116,9 @@ export const goodsStore = defineStore("goods", () => {
     setGoodsOff,
     importGoods,
     updateDate,
+    updateGoodsInfo,
+    injectInfo,
+    removeInfo,
+    setUpdateGoods,
   };
 });

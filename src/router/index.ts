@@ -44,13 +44,13 @@ const privateRouter = [
       {
         path: "/goods/update",
         name: "update",
-        component: () => import("@/views/goods/index.vue"),
+        component: () => import("@/views/goods/update/index.vue"),
         meta: { title: "update", icon: "Sort" },
       },
       {
         path: "/goods/list",
         name: "list",
-        component: () => import("@/views/goods/index.vue"),
+        component: () => import("@/views/goods/list/index.vue"),
         meta: { title: "list", icon: "Expand" },
       },
     ],

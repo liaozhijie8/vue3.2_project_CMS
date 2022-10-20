@@ -122,7 +122,7 @@ const pageSize = computed(() => {
 const total = computed(() => {
   return Number(goods.goodsTotal);
 });
-let tableData: GoodsList[] = computed(() => {
+const tableData: GoodsList[] = computed(() => {
   return goods.goodList;
 });
 /* 点击页码变化 */
@@ -144,7 +144,10 @@ const handleOff = (row: GoodsList) => {
   goods.setGoodsOff(row.id);
 };
 const handleEdit = (row: GoodsList) => {
-  console.log(row);
+  goods.injectInfo(row);
+  router.push({
+    name: "update",
+  });
 };
 /* 多选操作 */
 const handleOnAll = () => {

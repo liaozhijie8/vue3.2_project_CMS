@@ -2,6 +2,7 @@
   <div class="create-container">
     <el-button type="primary">excel上传</el-button>
     <UploadExcel :onSuccess="onSuccess"></UploadExcel>
+    <UploadPage></UploadPage>
   </div>
 </template>
 <script setup lang="ts">
@@ -10,8 +11,10 @@ import { GOODS_RELATIONS } from "./utils";
 import { goodsStore } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+import UploadPage from "../../../components/uploadPage/index.vue";
 const router = useRouter();
 const goods = goodsStore();
+/* 上传文件 */
 const onSuccess = ({ results }) => {
   const res = generateData(results);
   res.forEach(async (item) => {

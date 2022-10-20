@@ -35,3 +35,11 @@ export const createGoods = (data: CreateGoods) => {
     data,
   });
 };
+/* 修改商品信息 */
+export const updateGoods = (id: number, data: CreateGoods) => {
+  return request({
+    url: `/goods/update/${id}`,
+    method: "PUT",
+    data,
+  });
+};
