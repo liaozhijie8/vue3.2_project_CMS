@@ -11,3 +11,18 @@ export const goodsList = (params: Page) => {
     params,
   });
 };
+
+/* 上架商品 */
+export const goodsOn = (data: number) => {
+  return request({
+    url: `/goods/on/${data}`,
+    method: "POST",
+  });
+};
+/* 下架商品 */
+export const goodsOff = (data: number) => {
+  return request({
+    url: `/goods/off/${data}`,
+    method: "POST",
+  });
+};

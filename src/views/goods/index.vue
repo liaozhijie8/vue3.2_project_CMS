@@ -1,19 +1,22 @@
 <template>
   <div class="account-container">
     <div class="bnt-container">
+      <el-button type="primary" :icon="Plus" @click="addClick"
+        >添加商品</el-button
+      >
       <el-button
         type="success"
-        :icon="Refresh"
-        @click="restoreClick"
+        :icon="Top"
+        @click="handleOnAll"
         :disabled="multipleSelection.length == 0"
-        >恢复账户</el-button
+        >全部上架</el-button
       >
       <el-button
         type="danger"
-        :icon="Delete"
-        @click="removeClick"
+        :icon="Bottom"
+        @click="handleOffAll"
         :disabled="multipleSelection.length == 0"
-        >禁用账户</el-button
+        >全部下架</el-button
       >
     </div>
     <el-table
@@ -23,7 +26,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" min-width="10" />
-      <el-table-column property="id" label="序号" :min-width="width" />
+      <el-table-column property="id" label="序号" min-width="10" />
       <el-table-column
         property="goods_name"
         label="商品名称"
@@ -52,13 +55,33 @@
         :min-width="width"
       >
       </el-table-column>
-      <el-table-column
-        label="下架时间"
-        property="deletedAt"
-        show-overflow-tooltip
-        :formatter="dateFormat"
-        :min-width="width"
-      >
+      <el-table-column label="商品状态" :min-width="width">
+        <template #default="scope">
+          <p :style="{ color: scope.row.deletedAt ? red : green }">
+            {{ scope.row.deletedAt ? "已下架" : "在售中" }}
+          </p>
+        </template>
+      </el-table-column>
+      <el-table-column label="Operations">
+        <template #default="scope">
+          <el-button
+            size="small"
+            type="success"
+            v-if="scope.row.deletedAt"
+            @click="handleOn(scope.row)"
+            >上架</el-button
+          >
+          <el-button
+            size="small"
+            type="danger"
+            v-else
+            @click="handleOff(scope.row)"
+            >下架</el-button
+          >
+          <el-button size="small" type="primary" @click="handleEdit(scope.row)"
+            >修改</el-button
+          >
+        </template>
       </el-table-column>
     </el-table>
     <div class="pagination-container">
@@ -75,10 +98,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { ElTable } from "element-plus";
-import { Refresh, Delete } from "@element-plus/icons-vue";
-import { userStore, goodsStore } from "@/stores";
+import { Bottom, Plus, Top } from "@element-plus/icons-vue";
+import { goodsStore } from "@/stores";
 import dayjs from "dayjs";
 import type { GoodsList } from "@/interface/goods_interface";
 const red = ref("#F56C6C");
@@ -89,9 +112,8 @@ const multipleSelection = ref<GoodsList[]>([]);
 const handleSelectionChange = (val: GoodsList[]) => {
   multipleSelection.value = val;
 };
-/* 获取用户列表数据 */
+/* 获取列表数据 */
 const width = ref(30);
-const user = userStore();
 
 const pageSize = Number(goods.goodsPageSize);
 const total = Number(goods.goodsTotal);
@@ -99,7 +121,7 @@ let tableData: GoodsList[] = computed(() => {
   return goods.goodList;
 });
 // 格式化时间
-const dateFormat = (row, val) => {
+const dateFormat = (row: GoodsList, val) => {
   if (row[val.property] === null) {
     return "0";
   }
@@ -107,20 +129,38 @@ const dateFormat = (row, val) => {
   return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 };
 /* 点击页码变化 */
-const currentPage = ref();
+const currentPage = ref(1);
 // 重新获取数据
 const currentEvent = () => {
-  user.getUser_list(currentPage.value);
+  goods.getGoods_list(currentPage.value);
 };
-/* 用户注销与恢复 */
-const removeClick = () => {
+/* 增加商品 */
+const addClick = () => {
+  console.log("增加商品");
+};
+/* 操作 */
+const handleOn = (row: GoodsList) => {
+  goods.setGoodsOn(row.id);
+};
+const handleOff = (row: GoodsList) => {
+  goods.setGoodsOff(row.id);
+};
+const handleEdit = (row: GoodsList) => {
+  console.log(row);
+};
+/* 多选操作 */
+const handleOnAll = () => {
   multipleSelection.value.forEach((item) => {
-    user.remove_user(item.id);
+    if (item.deletedAt) {
+      goods.setGoodsOn(item.id);
+    }
   });
 };
-const restoreClick = () => {
+const handleOffAll = () => {
   multipleSelection.value.forEach((item) => {
-    user.restore_user(item.id);
+    if (!item.deletedAt) {
+      goods.setGoodsOff(item.id);
+    }
   });
 };
 </script>

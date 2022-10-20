@@ -18,6 +18,8 @@ import i18n from "@/i18n";
 // 导入svgicon
 import installIcons from "@/components/SvgIcon";
 import "virtual:svg-icons-register";
+// 全局属性
+import installFilter from "@/filter";
 
 const app = createApp(App);
 app.use(ElementPlus);
@@ -27,6 +29,7 @@ app.use(VueAxios, axios);
 app.use(i18n);
 // 全局注册组件
 installIcons(app);
+installFilter(app);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }

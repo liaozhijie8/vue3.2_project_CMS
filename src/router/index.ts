@@ -48,18 +48,6 @@ const privateRouter = [
         meta: { title: "update", icon: "Sort" },
       },
       {
-        path: "/goods/off",
-        name: "off",
-        component: () => import("@/views/goods/index.vue"),
-        meta: { title: "off", icon: "Bottom" },
-      },
-      {
-        path: "/goods/on",
-        name: "on",
-        component: () => import("@/views/goods/index.vue"),
-        meta: { title: "on", icon: "Top" },
-      },
-      {
         path: "/goods/list",
         name: "list",
         component: () => import("@/views/goods/index.vue"),

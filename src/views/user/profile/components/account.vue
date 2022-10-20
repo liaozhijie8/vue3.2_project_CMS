@@ -39,19 +39,28 @@
       </el-table-column>
       <el-table-column
         label="注册时间"
-        property="createdAt"
         show-overflow-tooltip
-        :formatter="dateFormat"
         :min-width="width"
       >
+        <template #default="scope">
+          {{ $filters.dateFilter(scope.row.createdAt) }}
+        </template>
       </el-table-column>
       <el-table-column
         label="销户时间"
-        property="deletedAt"
         show-overflow-tooltip
-        :formatter="dateFormat"
         :min-width="width"
       >
+        <template #default="scope">
+          {{ $filters.dateFilter(scope.row.deletedAt) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button size="small" type="primary" @click="setRole(scope.row)"
+            >角色管理</el-button
+          >
+        </template>
       </el-table-column>
     </el-table>
     <div class="pagination-container">
@@ -72,7 +81,6 @@ import { ref, computed } from "vue";
 import { ElTable } from "element-plus";
 import { Refresh, Delete } from "@element-plus/icons-vue";
 import { userStore } from "@/stores";
-import dayjs from "dayjs";
 import type { User } from "@/interface/user_interface";
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
@@ -89,14 +97,6 @@ const total = Number(user.userCount);
 let tableData: User[] = computed(() => {
   return user.userList;
 });
-// 格式化时间
-const dateFormat = (row, val) => {
-  if (row[val.property] === null) {
-    return "0";
-  }
-  var date = row[val.property];
-  return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-};
 /* 点击页码变化 */
 const currentPage = ref();
 // 重新获取数据
@@ -106,13 +106,22 @@ const currentEvent = () => {
 /* 用户注销与恢复 */
 const removeClick = () => {
   multipleSelection.value.forEach((item) => {
-    user.remove_user(item.id);
+    if (!item.deletedAt) {
+      user.remove_user(item.id);
+    }
   });
 };
+// 恢复
 const restoreClick = () => {
   multipleSelection.value.forEach((item) => {
-    user.restore_user(item.id);
+    if (item.deletedAt) {
+      user.restore_user(item.id);
+    }
   });
+};
+/* 角色管理 */
+const setRole = () => {
+  console.log("角色分配");
 };
 </script>
 
