@@ -49,11 +49,12 @@
       />
       <el-table-column
         label="上架时间"
-        property="createdAt"
         show-overflow-tooltip
-        :formatter="dateFormat"
         :min-width="width"
       >
+        <template #default="scope">
+          {{ $filters.dateFilter(scope.row.createdAt) }}
+        </template>
       </el-table-column>
       <el-table-column label="商品状态" :min-width="width">
         <template #default="scope">
@@ -98,12 +99,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { ElTable } from "element-plus";
 import { Bottom, Plus, Top } from "@element-plus/icons-vue";
 import { goodsStore } from "@/stores";
-import dayjs from "dayjs";
 import type { GoodsList } from "@/interface/goods_interface";
+import { useRouter } from "vue-router";
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
 const goods = goodsStore();
@@ -115,19 +116,15 @@ const handleSelectionChange = (val: GoodsList[]) => {
 /* 获取列表数据 */
 const width = ref(30);
 
-const pageSize = Number(goods.goodsPageSize);
-const total = Number(goods.goodsTotal);
+const pageSize = computed(() => {
+  return Number(goods.goodsPageSize);
+});
+const total = computed(() => {
+  return Number(goods.goodsTotal);
+});
 let tableData: GoodsList[] = computed(() => {
   return goods.goodList;
 });
-// 格式化时间
-const dateFormat = (row: GoodsList, val) => {
-  if (row[val.property] === null) {
-    return "0";
-  }
-  var date = row[val.property];
-  return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
-};
 /* 点击页码变化 */
 const currentPage = ref(1);
 // 重新获取数据
@@ -135,8 +132,9 @@ const currentEvent = () => {
   goods.getGoods_list(currentPage.value);
 };
 /* 增加商品 */
+const router = useRouter();
 const addClick = () => {
-  console.log("增加商品");
+  router.push("/goods/create");
 };
 /* 操作 */
 const handleOn = (row: GoodsList) => {
@@ -166,16 +164,9 @@ const handleOffAll = () => {
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/mixin.scss";
 .account-container {
-  width: 100%;
-  height: 100vh;
-  padding: 10px;
-  box-shadow: var(--el-box-shadow-light);
-  border-radius: var(--el-card-border-radius);
-  border: 1px solid var(--el-card-border-color);
-  background-color: var(--el-card-bg-color);
-  overflow: hidden;
-  color: var(--el-text-color-primary);
+  @include setBorder;
 }
 .bnt-container {
   height: 40px;

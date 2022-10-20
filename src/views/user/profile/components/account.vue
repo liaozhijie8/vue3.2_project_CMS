@@ -43,6 +43,7 @@
         :min-width="width"
       >
         <template #default="scope">
+          <!-- 全局属性 -->
           {{ $filters.dateFilter(scope.row.createdAt) }}
         </template>
       </el-table-column>

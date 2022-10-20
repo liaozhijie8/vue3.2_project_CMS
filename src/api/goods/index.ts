@@ -1,4 +1,5 @@
 import type { Page } from "@/interface/user_interface";
+import type { CreateGoods } from "@/interface/goods_interface";
 import request from "@/utils/request";
 
 /*
@@ -24,5 +25,13 @@ export const goodsOff = (data: number) => {
   return request({
     url: `/goods/off/${data}`,
     method: "POST",
+  });
+};
+/* 上传商品信息 */
+export const createGoods = (data: CreateGoods) => {
+  return request({
+    url: "/goods/create",
+    method: "POST",
+    data,
   });
 };

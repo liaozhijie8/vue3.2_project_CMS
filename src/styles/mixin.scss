@@ -26,3 +26,15 @@
   width: 100%;
   height: 100%;
 }
+
+@mixin setBorder {
+  width: 100%;
+  height: 100vh;
+  padding: 10px;
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: var(--el-card-border-radius);
+  border: 1px solid var(--el-card-border-color);
+  background-color: var(--el-card-bg-color);
+  overflow: hidden;
+  color: var(--el-text-color-primary);
+}

@@ -32,13 +32,13 @@ const privateRouter = [
   {
     path: "/goods",
     component: Layout,
-    redirect: "/goods/create",
+    redirect: "/goods/list",
     meta: { title: "goods", icon: "Goods" },
     children: [
       {
         path: "/goods/create",
         name: "create",
-        component: () => import("@/views/goods/index.vue"),
+        component: () => import("@/views/goods/create/index.vue"),
         meta: { title: "create", icon: "Upload" },
       },
       {
