@@ -14,7 +14,6 @@
   </el-menu-item>
 </template>
 <script setup lang="ts">
-import { defineProps } from "vue";
 import MenuItem from "./menuItem.vue";
 defineProps({
   route: {

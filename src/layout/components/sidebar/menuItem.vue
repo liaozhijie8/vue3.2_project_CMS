@@ -5,7 +5,6 @@
   <span>{{ $t(`msg.route.${title}`) }}</span>
 </template>
 <script setup lang="ts">
-import { defineProps } from "vue";
 defineProps({
   title: {
     type: String,

@@ -17,7 +17,7 @@ export const goodsStore = defineStore("goods", () => {
   const goodsTotal = ref();
   const goodList = ref({});
   async function getGoods_list(palyload: number) {
-    const { result } = await goodsList({ pageNum: palyload, pageSize: 10 });
+    const { result } = await goodsList({ pageNum: palyload, pageSize: 20 });
     const { pageNum, pageSize, total, list } = result;
     goodsPageNum.value = pageNum;
     goodsPageSize.value = pageSize;
@@ -32,13 +32,15 @@ export const goodsStore = defineStore("goods", () => {
     getGoods_list(goodsPageNum.value);
   }
   /* 上架商品 */
-  function setGoodsOn(palyload: number) {
+  function setGoodsOn(palyload: number, isMore: boolean = false) {
     return new Promise((resolve, rejects) => {
       goodsOn(palyload)
         .then((res) => {
           // 刷新数据
-          getGoods_list(goodsPageNum.value);
-          ElMessage.success(res.message);
+          updateDate();
+          if (!isMore) {
+            ElMessage.success(res.message);
+          }
           resolve(res);
         })
         .catch((err) => {
@@ -47,13 +49,15 @@ export const goodsStore = defineStore("goods", () => {
     });
   }
   /* 下架商品 */
-  function setGoodsOff(palyload: number) {
+  function setGoodsOff(palyload: number, isMore: boolean = false) {
     return new Promise((resolve, rejects) => {
       goodsOff(palyload)
         .then((res) => {
           // 刷新数据
-          getGoods_list(goodsPageNum.value);
-          ElMessage.success(res.message);
+          updateDate();
+          if (!isMore) {
+            ElMessage.success(res.message);
+          }
           resolve(res);
         })
         .catch((err) => {
@@ -105,6 +109,8 @@ export const goodsStore = defineStore("goods", () => {
         });
     });
   }
+  /* 判断打开哪种方式上传 */
+  const is_excel = ref(false);
   return {
     getGoods_list,
     hasGoodslist,
@@ -120,5 +126,6 @@ export const goodsStore = defineStore("goods", () => {
     injectInfo,
     removeInfo,
     setUpdateGoods,
+    is_excel,
   };
 });

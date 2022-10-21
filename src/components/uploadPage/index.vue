@@ -10,7 +10,11 @@
       status-icon
     >
       <el-form-item v-if="is_update" label="商品编号" prop="id">
-        <el-input v-model.number="ruleForm.id" placeholder="请输入商品编号" />
+        <el-input
+          v-model.number="ruleForm.id"
+          :disabled="is_listTo"
+          placeholder="请输入商品编号"
+        />
       </el-form-item>
       <el-form-item label="商品名称" prop="goods_name">
         <el-input v-model="ruleForm.goods_name" placeholder="请输入名称" />
@@ -63,6 +67,8 @@ let ruleForm = ref({
   goods_num: "",
   goods_img: "",
 });
+// 判断是否为商品列表跳转的修改行为
+const is_listTo = ref(false);
 /* 监听是否为修改状态 */
 const updateGoods = computed(() => {
   return goods.updateGoodsInfo;
@@ -72,6 +78,7 @@ watch(updateGoods, () => {
     let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
       updateGoods.value;
     if (goods_price) {
+      is_listTo.value = true;
       goods_price = Number(goods_price);
     }
     ruleForm.value = { goods_price, ...res };
@@ -81,8 +88,8 @@ watch(updateGoods, () => {
 const rules = reactive<FormRules>({
   id: [{ required: true, message: "请输入商品编号", trigger: "blur" }],
   goods_name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
-  price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
-  num: [{ required: true, message: "请输入商品数量", trigger: "blur" }],
+  goods_price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
+  goods_num: [{ required: true, message: "请输入商品数量", trigger: "blur" }],
   goods_img: [{ required: true, message: "请输入商品图片", trigger: "blur" }],
 });
 
@@ -107,6 +114,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
+  is_listTo.value = false;
   formEl.resetFields();
 };
 </script>

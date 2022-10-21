@@ -79,7 +79,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from "vue";
-import { ElTable } from "element-plus";
+import { ElMessage, ElTable } from "element-plus";
 import { Refresh, Delete } from "@element-plus/icons-vue";
 import { userStore } from "@/stores";
 import type { User } from "@/interface/user_interface";
@@ -111,6 +111,7 @@ const removeClick = () => {
       user.remove_user(item.id);
     }
   });
+  ElMessage.success("禁用账户成功");
 };
 // 恢复
 const restoreClick = () => {
@@ -119,6 +120,7 @@ const restoreClick = () => {
       user.restore_user(item.id);
     }
   });
+  ElMessage.success("恢复账户成功");
 };
 /* 角色管理 */
 const setRole = () => {

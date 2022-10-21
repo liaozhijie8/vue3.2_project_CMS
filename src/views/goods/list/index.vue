@@ -4,6 +4,9 @@
       <el-button type="primary" :icon="Plus" @click="addClick"
         >添加商品</el-button
       >
+      <el-button type="primary" :icon="Plus" @click="addExcelClick"
+        >Excel导入</el-button
+      >
       <el-button
         type="success"
         :icon="Top"
@@ -79,7 +82,11 @@
             @click="handleOff(scope.row)"
             >下架</el-button
           >
-          <el-button size="small" type="primary" @click="handleEdit(scope.row)"
+          <el-button
+            size="small"
+            type="primary"
+            @click="handleEdit(scope.row)"
+            :disabled="is_display(scope.row)"
             >修改</el-button
           >
         </template>
@@ -99,12 +106,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
-import { ElTable } from "element-plus";
+import { ref, computed } from "vue";
+import { ElMessage, ElTable } from "element-plus";
 import { Bottom, Plus, Top } from "@element-plus/icons-vue";
 import { goodsStore } from "@/stores";
 import type { GoodsList } from "@/interface/goods_interface";
 import { useRouter } from "vue-router";
+
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
 const goods = goodsStore();
@@ -112,6 +120,14 @@ const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<GoodsList[]>([]);
 const handleSelectionChange = (val: GoodsList[]) => {
   multipleSelection.value = val;
+};
+/* 是否禁用修改按钮 */
+const is_display = (val: GoodsList) => {
+  if (!val.deletedAt) {
+    return false;
+  } else {
+    return true;
+  }
 };
 /* 获取列表数据 */
 const width = ref(30);
@@ -134,6 +150,11 @@ const currentEvent = () => {
 /* 增加商品 */
 const router = useRouter();
 const addClick = () => {
+  goods.is_excel = false;
+  router.push("/goods/create");
+};
+const addExcelClick = () => {
+  goods.is_excel = true;
   router.push("/goods/create");
 };
 /* 操作 */
@@ -153,16 +174,18 @@ const handleEdit = (row: GoodsList) => {
 const handleOnAll = () => {
   multipleSelection.value.forEach((item) => {
     if (item.deletedAt) {
-      goods.setGoodsOn(item.id);
+      goods.setGoodsOn(item.id, true);
     }
   });
+  ElMessage.success("全部商品上架成功");
 };
 const handleOffAll = () => {
   multipleSelection.value.forEach((item) => {
     if (!item.deletedAt) {
-      goods.setGoodsOff(item.id);
+      goods.setGoodsOff(item.id, true);
     }
   });
+  ElMessage.success("全部商品下架成功");
 };
 </script>
 

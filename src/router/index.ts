@@ -36,6 +36,12 @@ const privateRouter = [
     meta: { title: "goods", icon: "Goods" },
     children: [
       {
+        path: "/goods/list",
+        name: "list",
+        component: () => import("@/views/goods/list/index.vue"),
+        meta: { title: "list", icon: "Expand" },
+      },
+      {
         path: "/goods/create",
         name: "create",
         component: () => import("@/views/goods/create/index.vue"),
@@ -46,12 +52,6 @@ const privateRouter = [
         name: "update",
         component: () => import("@/views/goods/update/index.vue"),
         meta: { title: "update", icon: "Sort" },
-      },
-      {
-        path: "/goods/list",
-        name: "list",
-        component: () => import("@/views/goods/list/index.vue"),
-        meta: { title: "list", icon: "Expand" },
       },
     ],
   },
