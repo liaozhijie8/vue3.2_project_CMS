@@ -164,12 +164,14 @@ const handleOn = (row: GoodsList) => {
 const handleOff = (row: GoodsList) => {
   goods.setGoodsOff(row.id);
 };
+// 修改商品
 const handleEdit = (row: GoodsList) => {
-  goods.injectInfo(row);
   router.push({
     name: "update",
   });
+  goods.injectInfo(row);
 };
+
 /* 多选操作 */
 const handleOnAll = () => {
   multipleSelection.value.forEach((item) => {

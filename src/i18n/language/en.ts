@@ -32,6 +32,7 @@ export default {
     excelImport: "ExcelImport",
     userManage: "EmployeeManage",
     userInfo: "UserInfo",
+    roleManage: "roleManage",
     roleList: "RoleList",
     permissionList: "PermissionList",
     article: "article",

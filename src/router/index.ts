@@ -28,6 +28,21 @@ const publicRouter = [
 ];
 /* 私有路由表 */
 const privateRouter = [
+  /* 角色管理 */
+  {
+    path: "/roles",
+    component: Layout,
+    redirect: "/roles/list",
+    meta: { title: "roleManage", icon: "UserFilled" },
+    children: [
+      {
+        path: "/roles/list",
+        name: "roleList",
+        component: () => import("@/views/role/roleList/index.vue"),
+        meta: { title: "roleList", icon: "List" },
+      },
+    ],
+  },
   /* 商品操作 */
   {
     path: "/goods",
@@ -39,7 +54,7 @@ const privateRouter = [
         path: "/goods/list",
         name: "list",
         component: () => import("@/views/goods/list/index.vue"),
-        meta: { title: "list", icon: "Expand" },
+        meta: { title: "list", icon: "List" },
       },
       {
         path: "/goods/create",

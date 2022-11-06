@@ -32,6 +32,7 @@ export default {
     excelImport: "Excel导入",
     userManage: "员工管理",
     userInfo: "员工信息",
+    roleManage: "角色管理",
     roleList: "角色列表",
     permissionList: "权限列表",
     article: "文章",
