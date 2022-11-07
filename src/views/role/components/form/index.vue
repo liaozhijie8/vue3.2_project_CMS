@@ -25,7 +25,6 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from "vue";
 import type { FormInstance } from "element-plus";
-import { updateRole, addRole } from "@/api/role";
 import { roleStore } from "@/stores";
 
 const role = roleStore();

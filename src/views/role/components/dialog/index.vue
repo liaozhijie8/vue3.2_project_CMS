@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="centerDialogVisible"
+    :v-model="is_open"
     :title="props.tabelData.name || '添加角色'"
     width="30%"
     center
@@ -16,7 +16,6 @@
   </el-dialog>
 </template>
 <script lang="ts" setup>
-import { ref, watch } from "vue";
 import FormTemplate from "../form/index.vue";
 const props = defineProps({
   is_open: {
@@ -28,23 +27,9 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["closeClick"]);
-const centerDialogVisible = ref(false);
-const cancelClick = () => {
-  centerDialogVisible.value = false;
-  emit("closeClick", false);
-};
 const confirmClick = () => {
-  centerDialogVisible.value = false;
   emit("closeClick", false);
 };
-watch(
-  () => props.is_open,
-  (newVal, oldVal) => {
-    if (newVal) {
-      centerDialogVisible.value = newVal;
-    }
-  }
-);
 </script>
 <style scoped>
 .dialog-footer button:first-child {

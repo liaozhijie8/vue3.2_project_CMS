@@ -41,6 +41,12 @@ const privateRouter = [
         component: () => import("@/views/role/roleList/index.vue"),
         meta: { title: "roleList", icon: "List" },
       },
+      {
+        path: "/roles/premission",
+        name: "permissionList",
+        component: () => import("@/views/role/permissionList/index.vue"),
+        meta: { title: "permissionList", icon: "List" },
+      },
     ],
   },
   /* 商品操作 */

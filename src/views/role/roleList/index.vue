@@ -1,26 +1,28 @@
 <template>
-  <div class="role-container">
-    <div class="addRole">
-      <el-button type="primary" :icon="CirclePlus" @click="addRoleClick"
-        >添加角色</el-button
-      >
-    </div>
-    <div class="tableBox">
-      <TableTemplate
-        :accep-table-data="allRoles"
-        :prop-array="titleArray"
-        :action-data="actionArray"
-        @edit-event="editAction"
-      ></TableTemplate>
-    </div>
+  <el-col :span="12" class="role-container">
+    <el-card shadow="hover">
+      <div class="addRole">
+        <el-button type="primary" :icon="CirclePlus" @click="addRoleClick"
+          >添加角色</el-button
+        >
+      </div>
+      <div class="tableBox">
+        <TableTemplate
+          :accep-table-data="allRoles"
+          :prop-array="titleArray"
+          :action-data="actionArray"
+          @edit-event="editAction"
+        ></TableTemplate>
+      </div>
 
-    <!-- 弹出框 -->
-    <DialogTemplate
-      :is_open="openDialog"
-      :tabel-data="dialogData"
-      @close-click="closeEvent"
-    ></DialogTemplate>
-  </div>
+      <!-- 弹出框 -->
+      <DialogTemplate
+        v-model="openDialog"
+        :tabel-data="dialogData"
+        @close-click="closeEvent"
+      ></DialogTemplate>
+    </el-card>
+  </el-col>
 </template>
 <script setup lang="ts">
 import { CirclePlus } from "@element-plus/icons-vue";
@@ -35,7 +37,7 @@ const role = roleStore();
 const titleArray = ref([
   { prop: "id", label: "编号", width: 100 },
   { prop: "title", label: "角色", width: 150 },
-  { prop: "describe", label: "功能", width: 400 },
+  { prop: "describe", label: "功能", width: 300 },
 ]);
 //渲染tabel的操作按钮
 const actionArray = ref([
@@ -85,12 +87,8 @@ const addRoleClick = () => {
 <style scoped lang="scss">
 @import "@/styles/mixin.scss";
 .role-container {
-  @include setBorder;
   .addRole {
     padding: 20px;
-  }
-  .tableBox {
-    width: 1000px;
   }
 }
 </style>
