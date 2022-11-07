@@ -26,11 +26,11 @@
 import { CirclePlus } from "@element-plus/icons-vue";
 import TableTemplate from "../components/table/index.vue";
 import DialogTemplate from "../components/dialog/index.vue";
-import { getAllRole, removeRole } from "@/api/role";
+import { roleStore } from "@/stores";
 import { ElMessage } from "element-plus";
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { openMessage } from "@/components/messageBox";
-const allRoles = ref([]);
+const role = roleStore();
 //渲染tabel的数据数组
 const titleArray = ref([
   { prop: "id", label: "编号", width: 100 },
@@ -43,15 +43,17 @@ const actionArray = ref([
   { id: 2, name: "修改角色", type: "update", color: "warning" },
   { id: 3, name: "删除角色", type: "delete", color: "danger" },
 ]);
-const getRoleList = async () => {
-  allRoles.value = await getAllRole().then((res) => {
-    return res.result;
-  });
-};
 //弹出修改框
 const openDialog = ref(false);
 const dialogData = ref({});
-getRoleList();
+/* 获取全部角色 */
+const allRoles = computed(() => {
+  return role.roleList;
+});
+//先获取数据
+onMounted(() => {
+  role.getRoleList();
+});
 const editAction = async (val) => {
   if (val.type === "update") {
     openDialog.value = true;
@@ -59,10 +61,10 @@ const editAction = async (val) => {
   }
   if (val.type === "delete") {
     openMessage("这个操作将是不可逆的,你确定要删除吗？", "警告").then(() => {
-      removeRole(val.id).then((res) => {
+      role.deleteRole(val.id).then((res) => {
         ElMessage({
           type: "success",
-          message: res.message,
+          message: res,
         });
       });
     });

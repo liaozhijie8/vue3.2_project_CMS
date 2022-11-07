@@ -26,7 +26,9 @@
 import { reactive, ref, watch } from "vue";
 import type { FormInstance } from "element-plus";
 import { updateRole, addRole } from "@/api/role";
+import { roleStore } from "@/stores";
 
+const role = roleStore();
 const ruleFormRef = ref<FormInstance>();
 const props = defineProps({
   ruleFormData: {
@@ -59,14 +61,15 @@ const rules = reactive({
   title: [{ validator: validatePass, trigger: "blur" }],
   describe: [{ validator: validatePass2, trigger: "blur" }],
 });
-const tipText = ref("");
+const tipText = ref();
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
       const { id, title, describe, type } = ruleForm.value;
       if (type === "update") {
-        updateRole(id, { title, describe })
+        role
+          .updateRoleInfo({ id, title, describe, type })
           .then((res) => {
             tipText.value = res.message;
           })
@@ -74,12 +77,13 @@ const submitForm = (formEl: FormInstance | undefined) => {
             tipText.value = err.message;
           });
       } else {
-        addRole({ title, describe })
+        role
+          .addRoleInfo({ title, describe })
           .then((res) => {
-            tipText.value = res.message;
+            tipText.value = res;
           })
           .catch((err) => {
-            tipText.value = err.message;
+            tipText.value = err;
           });
       }
     } else {
