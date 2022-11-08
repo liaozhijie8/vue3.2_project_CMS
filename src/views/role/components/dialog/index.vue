@@ -1,13 +1,13 @@
 <template>
   <el-dialog
     :v-model="is_open"
-    :title="props.tabelData.name || '添加角色'"
+    :title="props.titleName"
     width="30%"
     center
     draggable
     :show-close="false"
   >
-    <FormTemplate :rule-form-data="props.tabelData"></FormTemplate>
+    <slot></slot>
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="confirmClick()">关闭</el-button>
@@ -16,14 +16,14 @@
   </el-dialog>
 </template>
 <script lang="ts" setup>
-import FormTemplate from "../form/index.vue";
 const props = defineProps({
   is_open: {
     type: Boolean,
     default: false,
   },
-  tabelData: {
-    type: Object,
+  titleName: {
+    type: String,
+    default: "对话框标题",
   },
 });
 const emit = defineEmits(["closeClick"]);

@@ -36,6 +36,12 @@ const privateRouter = [
     meta: { title: "roleManage", icon: "UserFilled" },
     children: [
       {
+        path: "/roles/userManage",
+        name: "userManage",
+        component: () => import("@/views/role/userManage/index.vue"),
+        meta: { title: "userManage", icon: "List" },
+      },
+      {
         path: "/roles/list",
         name: "roleList",
         component: () => import("@/views/role/roleList/index.vue"),

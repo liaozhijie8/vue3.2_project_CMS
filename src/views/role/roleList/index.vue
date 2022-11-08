@@ -18,9 +18,11 @@
       <!-- 弹出框 -->
       <DialogTemplate
         v-model="openDialog"
-        :tabel-data="dialogData"
+        :title-name="dialogName"
         @close-click="closeEvent"
-      ></DialogTemplate>
+      >
+        <FormTemplate :rule-form-data="dialogData"></FormTemplate>
+      </DialogTemplate>
     </el-card>
   </el-col>
 </template>
@@ -28,6 +30,7 @@
 import { CirclePlus } from "@element-plus/icons-vue";
 import TableTemplate from "../components/table/index.vue";
 import DialogTemplate from "../components/dialog/index.vue";
+import FormTemplate from "../components/form/index.vue";
 import { roleStore } from "@/stores";
 import { ElMessage } from "element-plus";
 import { computed, onMounted, ref } from "vue";
@@ -45,22 +48,26 @@ const actionArray = ref([
   { id: 2, name: "修改角色", type: "update", color: "warning" },
   { id: 3, name: "删除角色", type: "delete", color: "danger" },
 ]);
-//弹出修改框
-const openDialog = ref(false);
-const dialogData = ref({});
+/* 先获取数据 */
+onMounted(() => {
+  role.getRoleList();
+});
 /* 获取全部角色 */
 const allRoles = computed(() => {
   return role.roleList;
 });
-//先获取数据
-onMounted(() => {
-  role.getRoleList();
-});
+/* 修改角色 */
+//弹出修改框
+const openDialog = ref(false);
+const dialogName = ref("");
+const dialogData = ref({});
 const editAction = async (val) => {
   if (val.type === "update") {
     openDialog.value = true;
     dialogData.value = val;
+    dialogName.value = "修改用户角色";
   }
+  // 删除角色
   if (val.type === "delete") {
     openMessage("这个操作将是不可逆的,你确定要删除吗？", "警告").then(() => {
       role.deleteRole(val.id).then((res) => {
@@ -78,6 +85,7 @@ const closeEvent = (val) => {
 /* 添加角色 */
 const addRoleClick = () => {
   openDialog.value = true;
+  dialogName.value = "添加角色";
   dialogData.value = {
     title: "",
     describe: "",

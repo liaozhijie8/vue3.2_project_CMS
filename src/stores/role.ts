@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { getAllRole, updateRole, removeRole, addRole } from "@/api/role";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 export const roleStore = defineStore("role", () => {
   /* 获取角色列表 */
   const roleList = ref([]);
@@ -13,6 +13,9 @@ export const roleStore = defineStore("role", () => {
         console.log(err);
       });
   };
+  const hasRoleslist = computed(() => {
+    return JSON.stringify(roleList.value) !== "[]";
+  });
   /* 更改角色信息 */
   const updateRoleInfo = async (palyload) => {
     const { id, ...res } = palyload;
@@ -47,5 +50,12 @@ export const roleStore = defineStore("role", () => {
         return err.message;
       });
   };
-  return { roleList, getRoleList, updateRoleInfo, deleteRole, addRoleInfo };
+  return {
+    roleList,
+    getRoleList,
+    updateRoleInfo,
+    deleteRole,
+    addRoleInfo,
+    hasRoleslist,
+  };
 });
