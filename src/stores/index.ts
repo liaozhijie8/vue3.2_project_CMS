@@ -5,6 +5,7 @@ import { appStore } from "./app";
 import { themeStore } from "./theme";
 import { goodsStore } from "./goods";
 import { roleStore } from "./role";
+import { permissionStore } from "./permission";
 const store = createPinia();
 
 export {
@@ -15,4 +16,5 @@ export {
   themeStore,
   goodsStore,
   roleStore,
+  permissionStore,
 };

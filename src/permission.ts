@@ -1,8 +1,15 @@
 import router from "@/router";
-import { userStore, store, goodsStore, roleStore } from "./stores";
+import {
+  userStore,
+  store,
+  goodsStore,
+  roleStore,
+  permissionStore,
+} from "./stores";
 const goods = goodsStore(store);
 const user = userStore(store);
 const role = roleStore(store);
+const permission = permissionStore(store);
 /* 白名单 */
 const whiteList = ["/login"];
 router.beforeEach(async (to, from, next) => {
@@ -22,6 +29,10 @@ router.beforeEach(async (to, from, next) => {
       }
       if (!role.hasRoleslist) {
         await role.getRoleList();
+      }
+      if (!permission.hasUserPermissionName) {
+        console.log("111");
+        await permission.getUserPermissionName(user.userInfo.id);
       }
       next();
     }

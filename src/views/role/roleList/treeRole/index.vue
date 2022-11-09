@@ -7,22 +7,16 @@
     node-key="id"
     highlight-current
     :props="defaultProps"
-    @check="test"
+    @check="addpermissionEvent"
   />
-
-  <div class="buttons">
-    <el-button @click="getCheckedKeys">get by key</el-button>
-    <el-button @click="setCheckedKeys">set by key</el-button>
-    <el-button @click="resetChecked">reset</el-button>
-  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, watchEffect } from "vue";
-import { ElTree } from "element-plus";
+import { ElMessage, ElTree } from "element-plus";
 import { routerData } from "../../utils/routerData";
 import { addPermission, findPermission } from "@/api/role";
-import { getIdArray } from "../utils";
+import { getIdArray, getNodes } from "../utils";
 const props = defineProps({
   roleId: {
     type: Number,
@@ -54,23 +48,18 @@ const getRolePermission = async () => {
 watchEffect(() => {
   getRolePermission();
 });
-const getCheckedKeys = () => {
-  console.log(treeRef.value!.getCheckedKeys(false));
-};
-const test = async () => {
+/* 为角色添加权限id和名字 */
+const addpermissionEvent = async () => {
   const data = treeRef.value!.getCheckedKeys(false);
-  await addPermission(props.roleId, { permission_id: data.toString() }).then(
-    (res) => {
-      console.log(res);
-    }
-  );
-  console.log(treeRef.value!.getCheckedKeys(false));
-};
-
-const setCheckedKeys = () => {
-  treeRef.value!.setCheckedKeys(["0"], false);
-};
-const resetChecked = () => {
-  treeRef.value!.setCheckedKeys([], false);
+  const dataNodes = treeRef.value!.getCheckedNodes(false, false);
+  const permissionName = getNodes(dataNodes).toString();
+  const permission_id = data.toString();
+  await addPermission(props.roleId, { permission_id, permissionName })
+    .then((res) => {
+      ElMessage.success(res.message);
+    })
+    .catch((err) => {
+      ElMessage.error(err.message);
+    });
 };
 </script>

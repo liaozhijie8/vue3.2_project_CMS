@@ -5,3 +5,13 @@ export const getIdArray = (val: String) => {
   }
   return temp;
 };
+
+export const getNodes = (val: Array) => {
+  const temp = [];
+  if (val != undefined) {
+    val.forEach((item) => {
+      temp.push(item.permissionName);
+    });
+  }
+  return temp;
+};
