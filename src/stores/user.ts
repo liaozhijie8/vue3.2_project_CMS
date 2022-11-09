@@ -20,6 +20,7 @@ import type { ChangePassword, Login } from "@/interface/user_interface";
 export const userStore = defineStore("user", () => {
   /* 登录模块 */
   const user_token = ref(getItem(TOKEN));
+  // 清空token
   function cleanToken() {
     user_token.value = "";
   }

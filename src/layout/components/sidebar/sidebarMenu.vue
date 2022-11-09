@@ -38,6 +38,7 @@ const default_active = computed(() => {
   const { path } = route;
   return path;
 });
+console.log(router.getRoutes());
 </script>
 
 <style lang="scss" scoped></style>

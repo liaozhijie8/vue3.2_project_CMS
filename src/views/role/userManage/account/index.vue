@@ -20,7 +20,7 @@
       ref="multipleTableRef"
       :data="tableData"
       style="width: 100%"
-      row-style="height:200px"
+      :row-style="{ height: 200 + 'px' }"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" min-width="10" />
@@ -28,14 +28,16 @@
       <el-table-column property="user_name" label="用户名" :min-width="width" />
       <el-table-column label="用户身份">
         <template #default="scope">
+          <!-- 身份显示 -->
           <div class="bntRole">
-            <button
-              class="bnt"
+            <el-button
+              type="primary"
               v-for="(item, index) in test2(scope.row.id)"
               :key="index"
+              plain
+              size="small"
+              >{{ item }}</el-button
             >
-              {{ item }}
-            </button>
           </div>
         </template>
       </el-table-column>
@@ -134,7 +136,7 @@ let tableData: User[] = computed(() => {
   return user.userList;
 });
 // 获取用户角色
-const allRolesBox = ref([]); //所有用户的角色
+const allRolesBox = ref([]); //所有用户的拥有角色
 const getUserRoleItem = async () => {
   user.userList.forEach(async (item) => {
     await userhasRole(item.id, roleData.value).then((res) => {
@@ -142,6 +144,8 @@ const getUserRoleItem = async () => {
     });
   });
 };
+
+// 剔除id
 const test2 = (id) => {
   let temp = [];
   allRolesBox.value.forEach((item) => {
@@ -219,10 +223,5 @@ const closeDialogEvent = (val) => {
   height: 50px;
   display: flex;
   justify-content: center;
-  .bntRole {
-    .bnt {
-      margin: 10px;
-    }
-  }
 }
 </style>

@@ -20,7 +20,7 @@
               <Featrue></Featrue>
             </el-tab-pane>
             <el-tab-pane :label="$t('msg.tabs.account')" name="third">
-              <Account></Account>
+              <el-empty description="正在建设" />
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -34,7 +34,6 @@ import Chapter from "./components/chapter.vue";
 import { ref } from "vue";
 import type { TabsPaneContext } from "element-plus";
 import Featrue from "./components/featrue.vue";
-import Account from "./components/account.vue";
 
 const activeName = ref("first");
 

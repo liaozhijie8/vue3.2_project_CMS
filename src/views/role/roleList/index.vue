@@ -21,7 +21,8 @@
         :title-name="dialogName"
         @close-click="closeEvent"
       >
-        <FormTemplate :rule-form-data="dialogData"></FormTemplate>
+        <TreeTemplate v-if="permissionBnt"></TreeTemplate>
+        <FormTemplate :rule-form-data="dialogData" v-else></FormTemplate>
       </DialogTemplate>
     </el-card>
   </el-col>
@@ -35,6 +36,7 @@ import { roleStore } from "@/stores";
 import { ElMessage } from "element-plus";
 import { computed, onMounted, ref } from "vue";
 import { openMessage } from "@/components/messageBox";
+import TreeTemplate from "./treeRole/index.vue";
 const role = roleStore();
 //渲染tabel的数据数组
 const titleArray = ref([
@@ -61,7 +63,10 @@ const allRoles = computed(() => {
 const openDialog = ref(false);
 const dialogName = ref("");
 const dialogData = ref({});
+// 分配权限按钮
+const permissionBnt = ref(false);
 const editAction = async (val) => {
+  console.log(val);
   if (val.type === "update") {
     openDialog.value = true;
     dialogData.value = val;
@@ -78,9 +83,16 @@ const editAction = async (val) => {
       });
     });
   }
+  // 权限分配
+  if (val.type === "permission") {
+    permissionBnt.value = true;
+    openDialog.value = true;
+    dialogName.value = "分配权限";
+  }
 };
 const closeEvent = (val) => {
   openDialog.value = val;
+  permissionBnt.value = val;
 };
 /* 添加角色 */
 const addRoleClick = () => {

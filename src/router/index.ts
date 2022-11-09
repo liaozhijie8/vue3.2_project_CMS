@@ -1,12 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
+import PermissionList from "./modules/role/PermissionLIst";
+import RoleList from "./modules/role/RoleList";
+import UserManage from "./modules/role/UserManage";
+import GoodsCreate from "./modules/goods/GoodsCreate";
+import GoodsList from "./modules/goods/GoodsList";
+import GoodsUpdate from "./modules/goods/GoodsUpdate";
+import Add from "./modules/cart/Add";
 import Layout from "@/layout/index.vue";
 /* 公开路由表 */
-const publicRouter = [
+export const publicRouter = [
   {
     /* 首页 */
     path: "/",
     component: Layout,
     redirect: "/profile",
+    name: "home",
     meta: { title: "home", icon: "House" },
     children: [
       {
@@ -23,16 +31,34 @@ const publicRouter = [
   /* 登录页 */
   {
     path: "/login",
+    name: "login",
     component: () => import("@/views/login/index.vue"),
   },
+  /* 404 */
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("@/views/errorPage/404.vue"),
+  },
 ];
+export const test = [
+  GoodsCreate,
+  GoodsList,
+  GoodsUpdate,
+  RoleList,
+  UserManage,
+  PermissionList,
+  Add,
+];
+console.log(test);
 /* 私有路由表 */
-const privateRouter = [
+export const privateRouter = [
   /* 角色管理 */
   {
     path: "/roles",
     component: Layout,
     redirect: "/roles/list",
+    name: "roles",
     meta: { title: "roleManage", icon: "UserFilled" },
     children: [
       {
@@ -59,6 +85,7 @@ const privateRouter = [
   {
     path: "/goods",
     component: Layout,
+    name: "goods",
     redirect: "/goods/list",
     meta: { title: "goods", icon: "Goods" },
     children: [

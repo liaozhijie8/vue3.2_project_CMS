@@ -14,7 +14,6 @@ export const openMessage = (content, title) => {
           type: "info",
           message: "取消删除",
         });
-        reject("info");
       });
   });
 };
