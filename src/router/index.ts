@@ -50,7 +50,6 @@ export const test = [
   PermissionList,
   Add,
 ];
-console.log(test);
 /* 私有路由表 */
 export const privateRouter = [
   /* 角色管理 */

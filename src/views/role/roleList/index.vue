@@ -21,7 +21,7 @@
         :title-name="dialogName"
         @close-click="closeEvent"
       >
-        <TreeTemplate v-if="permissionBnt"></TreeTemplate>
+        <TreeTemplate v-if="permissionBnt" :role-id="roleId"></TreeTemplate>
         <FormTemplate :rule-form-data="dialogData" v-else></FormTemplate>
       </DialogTemplate>
     </el-card>
@@ -64,9 +64,9 @@ const openDialog = ref(false);
 const dialogName = ref("");
 const dialogData = ref({});
 // 分配权限按钮
-const permissionBnt = ref(false);
+const permissionBnt = ref(false); //显示分配权限对话框
+const roleId = ref();
 const editAction = async (val) => {
-  console.log(val);
   if (val.type === "update") {
     openDialog.value = true;
     dialogData.value = val;
@@ -85,6 +85,7 @@ const editAction = async (val) => {
   }
   // 权限分配
   if (val.type === "permission") {
+    roleId.value = val.id;
     permissionBnt.value = true;
     openDialog.value = true;
     dialogName.value = "分配权限";

@@ -157,7 +157,7 @@ const test2 = (id) => {
   });
   return temp;
 };
-// 更新角色
+// 子组件定义的事件，触发更新角色
 const updateRole = () => {
   getUserRoleItem();
 };

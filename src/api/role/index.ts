@@ -31,3 +31,19 @@ export const addRole = (data) => {
     data,
   });
 };
+
+/* 查找角色拥有的权限id */
+export const findPermission = (id: number) => {
+  return request({
+    url: `/role/find/${id}`,
+    method: "GET",
+  });
+};
+/* 添加角色的权限id */
+export const addPermission = (id: number, data) => {
+  return request({
+    url: `/role/add/permission/${id}`,
+    method: "POST",
+    data,
+  });
+};

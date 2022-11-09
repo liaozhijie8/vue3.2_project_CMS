@@ -13,7 +13,7 @@ export const routerData = () => {
       });
     });
     temp.push({
-      id: index,
+      id: `${index}`,
       permissionName: item.name,
       permissionMark: item.name,
       permissionDesc: item.meta.permissionDesc,
