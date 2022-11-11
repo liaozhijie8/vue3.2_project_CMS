@@ -10,17 +10,32 @@ const goods = goodsStore(store);
 const user = userStore(store);
 const role = roleStore(store);
 const permission = permissionStore(store);
+
 /* 白名单 */
 const whiteList = ["/login"];
+let temp = true;
 router.beforeEach(async (to, from, next) => {
-  //用户已登录，则不允许进入login
+  //用户已登录
   if (user.user_token) {
-    if (to.path === "/login") {
+    console.log(user.hasUserInfo);
+    console.log(user.userInfo);
+    if (!user.hasUserInfo) {
+      const { result } = await user.getProfile();
+      console.log("222");
+      console.log(result);
+      const res = await permission.getUserPermissionName(result.id);
+      const filterRoutes = await permission.handleRoutesData();
+      console.log(filterRoutes);
+      //动态添加路由
+      filterRoutes.forEach((item) => {
+        router.addRoute(item);
+        console.log("添加路由");
+      });
+      console.log(to.path);
+      return next(to.path);
+    } else if (to.path === "/login") {
       next("/");
     } else {
-      if (!user.hasUserInfo) {
-        await user.getProfile();
-      }
       if (!user.hasUserlist) {
         await user.getUser_list(user.pageNum);
       }
@@ -30,14 +45,10 @@ router.beforeEach(async (to, from, next) => {
       if (!role.hasRoleslist) {
         await role.getRoleList();
       }
-      if (!permission.hasUserPermissionName) {
-        console.log("111");
-        await permission.getUserPermissionName(user.userInfo.id);
-      }
       next();
     }
   } else {
-    //用户未登录，只允许进入login
+    //用户未登录
     if (whiteList.indexOf(to.path) > -1) {
       next();
     } else {

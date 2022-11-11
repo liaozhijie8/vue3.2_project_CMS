@@ -3,7 +3,7 @@ import Layout from "@/layout/index.vue";
 export default {
   path: "/goods",
   component: Layout,
-  name: "goods",
+  name: "update",
   redirect: "/goods/list",
   meta: { title: "goods", icon: "Goods", permissionDesc: "商品管理菜单" },
   children: [

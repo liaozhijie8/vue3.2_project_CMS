@@ -4,7 +4,7 @@ export default {
   path: "/carts",
   component: Layout,
   redirect: "/carts/add",
-  name: "carts",
+  name: "add",
   meta: {
     title: "carts",
     icon: "ShoppingTrolley",

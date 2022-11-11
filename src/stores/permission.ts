@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { publicRouter } from "@/router";
+import router, { publicRouter } from "@/router";
 import { ref, computed } from "vue";
 import { getUserRoleID } from "@/api/userRole";
 import { findPermission } from "@/api/role";
 import { ElMessage } from "element-plus";
 import { getIdArray } from "@/views/role/roleList/utils";
+import { privateRouter } from "@/router";
 export const permissionStore = defineStore("permission", () => {
   const routes = ref(publicRouter); //路由数据
   /* 增加路由 */
@@ -15,22 +16,38 @@ export const permissionStore = defineStore("permission", () => {
   const hasUserPermissionName = computed(() => {
     return UserPermissionName.value.length > 0;
   });
-  /* 请求路由参数 */
-  const getUserPermissionName = async (id: Number) => {
-    // 查找用户拥有的角色
-    await getUserRoleID(id)
-      .then((res) => {
-        const role_id_array = getIdArray(res.result.role_id);
-        // 查找角色拥有的权限
-        role_id_array.forEach(async (item) => {
-          await findPermission(Number(item)).then((res) => {
-            UserPermissionName.value.push(...getIdArray(res.result.permissionName));
-          });
-        });
-      })
-      .catch((err) => {
-        ElMessage.error(err.message);
+  /* 清空路由参数 */
+  const removeUserPermissionName = () => {
+    UserPermissionName.value = [];
+  };
+  /* 处理路由参数 */
+  const handleRoutesData = async () => {
+    const temp = [];
+    UserPermissionName.value.forEach((item) => {
+      const matchItem = privateRouter.filter((key) => {
+        return key.children[0].name === item;
       });
+      if (matchItem.length > 0) {
+        temp.push(...matchItem);
+      }
+    });
+    setRoutes(temp);
+    return temp;
+  };
+  /* 查找当前角色拥有的权限名称 */
+  const getUserPermissionName = async (id: number) => {
+    const temp = [];
+    const { result } = await getUserRoleID(id); // 查找用户拥有的角色
+    const { role_id } = result;
+    const role_id_array = getIdArray(role_id);
+    return new Promise((resolve, reject) => {
+      role_id_array.forEach(async (item) => {
+        const res = await findPermission(Number(item)); // 查找角色拥有的权限
+        const { permissionName } = res.result;
+        UserPermissionName.value.push(...getIdArray(permissionName));
+        resolve(UserPermissionName.value);
+      });
+    });
   };
   return {
     routes,
@@ -38,5 +55,7 @@ export const permissionStore = defineStore("permission", () => {
     getUserPermissionName,
     UserPermissionName,
     hasUserPermissionName,
+    handleRoutesData,
+    removeUserPermissionName,
   };
 });

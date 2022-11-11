@@ -15,8 +15,9 @@ import router from "@/router";
 import { ElMessage } from "element-plus";
 import { setTimeStamp } from "@/utils/auth";
 import type { ChangePassword, Login } from "@/interface/user_interface";
+import { resetRouter } from "@/router";
+import { permissionStore } from "./permission";
 // 类型接口
-
 export const userStore = defineStore("user", () => {
   /* 登录模块 */
   const user_token = ref(getItem(TOKEN));
@@ -51,19 +52,32 @@ export const userStore = defineStore("user", () => {
   /* 获取用户信息 */
   const userInfo = ref({});
   async function getProfile() {
-    const { result } = await profile();
-    userInfo.value = result;
+    return new Promise((resolve, reject) => {
+      profile()
+        .then((res) => {
+          const { result } = res;
+          userInfo.value = result;
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
   const hasUserInfo = computed(() => {
     return JSON.stringify(userInfo.value) !== "{}";
   });
   /* 退出登录 */
   const logout = (content: string) => {
+    const permission = permissionStore();
+    resetRouter();
+    permission.removeUserPermissionName();
     removeAllItem();
     cleanToken();
-    userInfo.value = "";
+    userInfo.value = {};
     // TODO: 清理权限
     router.push("/login");
+
     ElMessage.success(content);
   };
   /* 修改用户密码 */

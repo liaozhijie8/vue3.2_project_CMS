@@ -31,12 +31,16 @@
 <script setup lang="ts">
 import ProjectCard from "./components/projectCard.vue";
 import Chapter from "./components/chapter.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import type { TabsPaneContext } from "element-plus";
 import Featrue from "./components/featrue.vue";
-
+import { permissionStore, userStore } from "@/stores";
+const permission = permissionStore();
+const user = userStore();
 const activeName = ref("first");
-
+onMounted(async () => {
+  console.log(user.userInfo);
+});
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event);
 };

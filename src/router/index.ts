@@ -7,6 +7,8 @@ import GoodsList from "./modules/goods/GoodsList";
 import GoodsUpdate from "./modules/goods/GoodsUpdate";
 import Add from "./modules/cart/Add";
 import Layout from "@/layout/index.vue";
+import { permissionStore, userStore } from "@/stores";
+
 /* 公开路由表 */
 export const publicRouter = [
   {
@@ -26,7 +28,17 @@ export const publicRouter = [
           icon: "User",
         },
       },
+      {
+        path: "/404",
+        name: "404",
+        component: () => import("@/views/errorPage/404.vue"),
+      },
     ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "notFound",
+    component: () => import("@/views/errorPage/404.vue"),
   },
   /* 登录页 */
   {
@@ -34,99 +46,32 @@ export const publicRouter = [
     name: "login",
     component: () => import("@/views/login/index.vue"),
   },
-  /* 404 */
-  {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: () => import("@/views/errorPage/404.vue"),
-  },
 ];
-export const test = [
-  GoodsCreate,
-  GoodsList,
-  GoodsUpdate,
+export const privateRouter = [
   RoleList,
   UserManage,
   PermissionList,
+  GoodsCreate,
+  GoodsList,
+  GoodsUpdate,
   Add,
 ];
 /* 私有路由表 */
-export const privateRouter = [
-  /* 角色管理 */
-  {
-    path: "/roles",
-    component: Layout,
-    redirect: "/roles/list",
-    name: "roles",
-    meta: { title: "roleManage", icon: "UserFilled" },
-    children: [
-      {
-        path: "/roles/userManage",
-        name: "userManage",
-        component: () => import("@/views/role/userManage/index.vue"),
-        meta: { title: "userManage", icon: "List" },
-      },
-      {
-        path: "/roles/list",
-        name: "roleList",
-        component: () => import("@/views/role/roleList/index.vue"),
-        meta: { title: "roleList", icon: "List" },
-      },
-      {
-        path: "/roles/premission",
-        name: "permissionList",
-        component: () => import("@/views/role/permissionList/index.vue"),
-        meta: { title: "permissionList", icon: "List" },
-      },
-    ],
-  },
-  /* 商品操作 */
-  {
-    path: "/goods",
-    component: Layout,
-    name: "goods",
-    redirect: "/goods/list",
-    meta: { title: "goods", icon: "Goods" },
-    children: [
-      {
-        path: "/goods/list",
-        name: "list",
-        component: () => import("@/views/goods/list/index.vue"),
-        meta: { title: "list", icon: "List" },
-      },
-      {
-        path: "/goods/create",
-        name: "create",
-        component: () => import("@/views/goods/create/index.vue"),
-        meta: { title: "create", icon: "Upload" },
-      },
-      {
-        path: "/goods/update",
-        name: "update",
-        component: () => import("@/views/goods/update/index.vue"),
-        meta: { title: "update", icon: "Sort" },
-      },
-    ],
-  },
-  /* 购物车操作 */
-  {
-    path: "/carts",
-    component: Layout,
-    redirect: "/carts/add",
-    meta: { title: "carts", icon: "ShoppingTrolley" },
-    children: [
-      {
-        path: "/carts/add",
-        name: "carts",
-        component: () => import("@/views/carts/index.vue"),
-        meta: { title: "add", icon: "TrendCharts" },
-      },
-    ],
-  },
-];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...publicRouter, ...privateRouter],
+  routes: publicRouter,
 });
-
+/* 重置路由表 */
+export const resetRouter = () => {
+  const permission = permissionStore();
+  const user = userStore();
+  if (user.userInfo && permission.hasUserPermissionName) {
+    const menus = permission.UserPermissionName;
+    menus.forEach((item) => {
+      if (router.hasRoute(item)) {
+        router.removeRoute(item);
+      }
+    });
+  }
+};
 export default router;

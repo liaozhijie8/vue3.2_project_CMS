@@ -4,7 +4,7 @@ export default {
   path: "/roles",
   component: Layout,
   redirect: "/roles/list",
-  name: "roleManage",
+  name: "roleList",
   meta: {
     title: "roleManage",
     icon: "UserFilled",

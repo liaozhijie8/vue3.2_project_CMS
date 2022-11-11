@@ -1,8 +1,8 @@
-import { test } from "@/router";
+import { privateRouter } from "@/router";
 
 export const routerData = () => {
   const temp = [];
-  test.forEach((item, index) => {
+  privateRouter.forEach((item, index) => {
     const temp2 = [];
     item.children.forEach((children, y) => {
       temp2.push({
@@ -14,8 +14,8 @@ export const routerData = () => {
     });
     temp.push({
       id: `${index}`,
-      permissionName: item.name,
-      permissionMark: item.name,
+      permissionName: item.meta.title,
+      permissionMark: item.meta.title,
       permissionDesc: item.meta.permissionDesc,
       children: temp2,
     });
@@ -44,3 +44,7 @@ export const routerData = () => {
   }
   return result;
 };
+
+export const handleRoleData = (val) =>{
+  const temp = []
+}

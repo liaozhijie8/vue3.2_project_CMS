@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import type { FormInstance } from "element-plus";
 import { Avatar, Lock } from "@element-plus/icons-vue";
 import { validatePass } from "./rules"; //验证规则导入
 import { userStore } from "@/stores/user";
 import LangSelect from "../../components/langSelect/index.vue";
 import { useI18n } from "vue-i18n";
+import { permissionStore } from "@/stores";
+const permission = permissionStore();
 const counter = userStore();
 const ruleFormRef = ref<FormInstance>();
 const ruleForm = reactive({
@@ -54,6 +56,10 @@ const changView = () => {
     passwordType.value = "password";
   }
 };
+onMounted(() => {
+  console.log(permission.UserPermissionName);
+  console.log(counter.userInfo);
+});
 </script>
 <template>
   <div class="login-container">
