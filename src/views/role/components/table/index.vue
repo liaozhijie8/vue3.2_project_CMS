@@ -14,6 +14,7 @@
           size="small"
           v-for="item in actionData"
           :key="item.id"
+          :disabled="scope.row.title === '超级管理员'"
           @click="handleClick(scope.row, item.type, item.name)"
           >{{ item.name }}</el-button
         >

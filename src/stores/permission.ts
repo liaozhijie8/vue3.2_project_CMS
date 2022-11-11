@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
-import router, { publicRouter } from "@/router";
+import { publicRouter } from "@/router";
 import { ref, computed } from "vue";
 import { getUserRoleID } from "@/api/userRole";
 import { findPermission } from "@/api/role";
-import { ElMessage } from "element-plus";
 import { getIdArray } from "@/views/role/roleList/utils";
 import { privateRouter } from "@/router";
 export const permissionStore = defineStore("permission", () => {
@@ -52,7 +51,7 @@ export const permissionStore = defineStore("permission", () => {
       role_id_array.forEach(async (item) => {
         await temp.push(findPermissionEvent(item));
       });
-      for await (let key of temp) {
+      for await (const key of temp) {
         UserPermissionName.value.push(...key);
       }
       resolve(UserPermissionName.value);

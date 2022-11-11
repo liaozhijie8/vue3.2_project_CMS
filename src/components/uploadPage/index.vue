@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, watch, watchEffect } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import { goodsStore } from "@/stores";
 import { useRouter } from "vue-router";
@@ -84,6 +84,17 @@ watch(updateGoods, () => {
     ruleForm.value = { goods_price, ...res };
   }
 });
+watchEffect(() => {
+  if (props.is_update) {
+    let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
+      updateGoods.value;
+    if (goods_price) {
+      is_listTo.value = true;
+      goods_price = Number(goods_price);
+    }
+    ruleForm.value = { goods_price, ...res };
+  }
+});
 
 const rules = reactive<FormRules>({
   id: [{ required: true, message: "请输入商品编号", trigger: "blur" }],
@@ -105,6 +116,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         // 处于修改
         goods.setUpdateGoods(ruleForm.value);
       }
+      is_listTo.value = false;
       router.push("/goods/list");
     } else {
       ElMessage.error("请输入完整信息");

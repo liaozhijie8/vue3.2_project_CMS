@@ -167,7 +167,7 @@ const handleOff = (row: GoodsList) => {
 // 修改商品
 const handleEdit = (row: GoodsList) => {
   router.push({
-    name: "update",
+    path: "/goods/update",
   });
   goods.injectInfo(row);
 };

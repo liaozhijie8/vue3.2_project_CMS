@@ -70,7 +70,7 @@ const editAction = async (val) => {
   if (val.type === "update") {
     openDialog.value = true;
     dialogData.value = val;
-    dialogName.value = "修改用户角色";
+    dialogName.value = `修改用户角色---${val.title}`;
   }
   // 删除角色
   if (val.type === "delete") {
@@ -88,7 +88,7 @@ const editAction = async (val) => {
     roleId.value = val.id;
     permissionBnt.value = true;
     openDialog.value = true;
-    dialogName.value = "分配权限";
+    dialogName.value = `分配权限---${val.title}`;
   }
 };
 const closeEvent = (val) => {
