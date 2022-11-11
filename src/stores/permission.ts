@@ -35,23 +35,27 @@ export const permissionStore = defineStore("permission", () => {
     return temp;
   };
   /* 查找当前角色拥有的权限名称 */
+  const findPermissionEvent = (item) => {
+    return new Promise((resolve, reject) => {
+      findPermission(Number(item)).then((res) => {
+        const { permissionName } = res.result;
+        resolve(getIdArray(permissionName));
+      }); // 查找角色拥有的权限
+    });
+  };
   const getUserPermissionName = async (id: number) => {
     const { result } = await getUserRoleID(id); // 查找用户拥有的角色
     const { role_id } = result;
-    let temp2 = 0;
+    const temp = [];
     const role_id_array = getIdArray(role_id);
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       role_id_array.forEach(async (item) => {
-        findPermission(Number(item)).then((res) => {
-          const { permissionName } = res.result;
-          UserPermissionName.value.push(...getIdArray(permissionName));
-          temp2 += 1;
-          //判断是否循环完毕数组里面的再resolve
-          if (temp2 == role_id_array.length) {
-            resolve(UserPermissionName.value);
-          }
-        }); // 查找角色拥有的权限
+        await temp.push(findPermissionEvent(item));
       });
+      for await (let key of temp) {
+        UserPermissionName.value.push(...key);
+      }
+      resolve(UserPermissionName.value);
     });
   };
   return {
