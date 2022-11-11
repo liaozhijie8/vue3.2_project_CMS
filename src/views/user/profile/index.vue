@@ -38,9 +38,6 @@ import { permissionStore, userStore } from "@/stores";
 const permission = permissionStore();
 const user = userStore();
 const activeName = ref("first");
-onMounted(async () => {
-  console.log(user.userInfo);
-});
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event);
 };

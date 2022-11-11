@@ -56,10 +56,6 @@ const changView = () => {
     passwordType.value = "password";
   }
 };
-onMounted(() => {
-  console.log(permission.UserPermissionName);
-  console.log(counter.userInfo);
-});
 </script>
 <template>
   <div class="login-container">
