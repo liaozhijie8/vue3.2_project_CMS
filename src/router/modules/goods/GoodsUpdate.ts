@@ -11,7 +11,7 @@ export default {
       path: "/goods/update",
       name: "update",
       component: () => import("@/views/goods/update/index.vue"),
-      meta: { title: "update", icon: "Sort", permissionDesc: "更新商品信息" },
+      meta: { title: "update", permissionDesc: "更新商品信息" },
     },
   ],
 };

@@ -71,20 +71,22 @@
           <el-button
             size="small"
             type="success"
-            v-if="scope.row.deletedAt"
+            v-show="scope.row.deletedAt"
             @click="handleOn(scope.row)"
             >上架</el-button
           >
           <el-button
             size="small"
             type="danger"
-            v-else
+            style="margin: 0"
+            v-show="!scope.row.deletedAt"
             @click="handleOff(scope.row)"
             >下架</el-button
           >
           <el-button
             size="small"
             type="primary"
+            v-permission="['update']"
             @click="handleEdit(scope.row)"
             :disabled="is_display(scope.row)"
             >修改</el-button

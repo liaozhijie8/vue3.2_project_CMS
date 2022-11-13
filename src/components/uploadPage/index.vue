@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref, watch, watchEffect } from "vue";
+import { computed, onActivated, reactive, ref } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import { goodsStore } from "@/stores";
 import { useRouter } from "vue-router";
@@ -73,18 +73,18 @@ const is_listTo = ref(false);
 const updateGoods = computed(() => {
   return goods.updateGoodsInfo;
 });
-watch(updateGoods, () => {
-  if (props.is_update) {
-    let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
-      updateGoods.value;
-    if (goods_price) {
-      is_listTo.value = true;
-      goods_price = Number(goods_price);
-    }
-    ruleForm.value = { goods_price, ...res };
-  }
-});
-watchEffect(() => {
+// watchEffect(() => {
+//   if (props.is_update) {
+//     let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
+//       updateGoods.value;
+//     if (goods_price) {
+//       is_listTo.value = true;
+//       goods_price = Number(goods_price);
+//     }
+//     ruleForm.value = { goods_price, ...res };
+//   }
+// });
+onActivated(() => {
   if (props.is_update) {
     let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
       updateGoods.value;
@@ -127,7 +127,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   is_listTo.value = false;
-  formEl.resetFields();
+  ruleForm.value = {
+    id: "",
+    goods_name: "",
+    goods_price: "",
+    goods_num: "",
+    goods_img: "",
+  };
 };
 </script>
 <style lang="scss" scoped>
