@@ -69,7 +69,11 @@
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button size="small" type="primary" @click="setRole(scope.row)"
+          <el-button
+            size="small"
+            type="primary"
+            @click="setRole(scope.row)"
+            :disabled="scope.row.id === 1"
             >角色管理</el-button
           >
         </template>

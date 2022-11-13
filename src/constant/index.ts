@@ -11,3 +11,6 @@ export const MAIN_COLOR = "mainColor";
 export const DEFAULT_COLOR = "#409eff";
 // tags
 export const TAGS_VIEW = "tagsView";
+
+// 超级管理员
+export const SUPER_ADMID = "超级管理员";

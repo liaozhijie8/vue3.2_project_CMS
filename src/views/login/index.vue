@@ -6,8 +6,6 @@ import { validatePass } from "./rules"; //验证规则导入
 import { userStore } from "@/stores/user";
 import LangSelect from "../../components/langSelect/index.vue";
 import { useI18n } from "vue-i18n";
-import { permissionStore } from "@/stores";
-const permission = permissionStore();
 const counter = userStore();
 const ruleFormRef = ref<FormInstance>();
 const ruleForm = reactive({
