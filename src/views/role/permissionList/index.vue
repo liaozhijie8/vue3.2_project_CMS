@@ -10,13 +10,13 @@
       >
         <el-table-column
           prop="permissionName"
-          label="permissionMark"
+          label="权限"
           sortable
           width="180"
         />
         <el-table-column
           prop="permissionMark"
-          label="Name"
+          label="对应的权限关键字"
           sortable
           width="180"
         />
@@ -31,7 +31,7 @@
   </el-col>
 </template>
 <script setup lang="ts">
-import { routerData } from "../utils/routerData";
-const tableData = routerData();
+import { handlePermissionName } from "../utils/routerData";
+const tableData = handlePermissionName();
 </script>
 <style scoped lang="scss"></style>

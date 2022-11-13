@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { ref, watchEffect } from "vue";
 import { ElMessage, ElTree } from "element-plus";
-import { routerData } from "../../utils/routerData";
+import { handlePermissionName } from "../../utils/routerData";
 import { addPermission, findPermission } from "@/api/role";
 import { getIdArray, getNodes } from "../utils";
 const props = defineProps({
@@ -32,7 +32,7 @@ interface Tree {
 }
 
 const treeRef = ref<InstanceType<typeof ElTree>>();
-const data: Tree[] = routerData();
+const data: Tree[] = handlePermissionName();
 const defaultProps = {
   children: "children",
   label: "permissionName",

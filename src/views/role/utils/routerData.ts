@@ -1,5 +1,5 @@
 import { privateRouter } from "@/router";
-
+import { generateTitle } from "@/utils/i18n";
 export const routerData = () => {
   const temp = [];
   privateRouter.forEach((item, index) => {
@@ -45,6 +45,14 @@ export const routerData = () => {
   return result;
 };
 
-export const handleRoleData = (val) =>{
-  const temp = []
-}
+export const handlePermissionName = () => {
+  const temp = [];
+  routerData().forEach((item) => {
+    item.permissionName = generateTitle(item.permissionName);
+    for (let key of item.children) {
+      key.permissionName = generateTitle(key.permissionName);
+    }
+    temp.push(item);
+  });
+  return temp;
+};

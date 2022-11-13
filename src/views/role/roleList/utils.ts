@@ -10,7 +10,7 @@ export const getNodes = (val: Array) => {
   const temp = [];
   if (val != undefined) {
     val.forEach((item) => {
-      temp.push(item.permissionName);
+      temp.push(item.permissionMark);
     });
   }
   return temp;
