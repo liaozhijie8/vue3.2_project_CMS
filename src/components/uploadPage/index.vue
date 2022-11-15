@@ -41,12 +41,21 @@
         <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
       </el-form-item>
     </el-form>
+    <DrawerBox v-model="isDrawer">
+      <template #header><h4>上传图片</h4></template>
+      <template #content>
+        <UploadImage></UploadImage>
+      </template>
+    </DrawerBox>
+    <el-button @click="displayDrawer">打开抽屉</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, onActivated, reactive, ref } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
+import DrawerBox from "@/components/drawer/index.vue";
+import UploadImage from "@/components/uploadImage/index.vue";
 import { goodsStore } from "@/stores";
 import { useRouter } from "vue-router";
 
@@ -56,6 +65,11 @@ const props = defineProps({
     default: false,
   },
 });
+// 控制drawer显示
+const isDrawer = ref(false);
+const displayDrawer = () => {
+  isDrawer.value = true;
+};
 const router = useRouter();
 const goods = goodsStore();
 const formSize = ref("large");

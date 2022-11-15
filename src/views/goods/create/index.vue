@@ -5,6 +5,7 @@
     }}</el-button>
     <UploadExcel :onSuccess="onSuccess" v-if="which_upload"></UploadExcel>
     <UploadPage v-else></UploadPage>
+    <div class="test"></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -14,9 +15,10 @@ import { goodsStore } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import UploadPage from "../../../components/uploadPage/index.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 const router = useRouter();
 const goods = goodsStore();
+
 /* 判断是打开哪种方式上传 */
 const which_upload = computed(() => {
   return goods.is_excel;
