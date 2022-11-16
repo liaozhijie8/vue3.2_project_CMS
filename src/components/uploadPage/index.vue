@@ -32,7 +32,8 @@
         />
       </el-form-item>
       <el-form-item label="商品图片" prop="goods_img">
-        <el-input v-model="ruleForm.goods_img" placeholder="请输入图片地址" />
+        <el-button @click="displayDrawer">上传图片</el-button>
+        <input v-model="ruleForm.goods_img" v-show="false" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)"
@@ -44,10 +45,12 @@
     <DrawerBox v-model="isDrawer">
       <template #header><h4>上传图片</h4></template>
       <template #content>
-        <UploadImage></UploadImage>
+        <UploadImage
+          @img-list="handledImgData"
+          :file-list-own-data="ownImgData"
+        ></UploadImage>
       </template>
     </DrawerBox>
-    <el-button @click="displayDrawer">打开抽屉</el-button>
   </div>
 </template>
 
@@ -56,8 +59,9 @@ import { computed, onActivated, reactive, ref } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import DrawerBox from "@/components/drawer/index.vue";
 import UploadImage from "@/components/uploadImage/index.vue";
-import { goodsStore } from "@/stores";
+import { goodsStore, imgStore } from "@/stores";
 import { useRouter } from "vue-router";
+import { addImg_api } from "@/api/img";
 
 const props = defineProps({
   is_update: {
@@ -72,14 +76,14 @@ const displayDrawer = () => {
 };
 const router = useRouter();
 const goods = goodsStore();
+const img = imgStore();
 const formSize = ref("large");
-const ruleFormRef = ref<FormInstance>();
+const ruleFormRef = ref();
 let ruleForm = ref({
   id: "",
   goods_name: "",
   goods_price: "",
   goods_num: "",
-  goods_img: "",
 });
 // 判断是否为商品列表跳转的修改行为
 const is_listTo = ref(false);
@@ -87,38 +91,34 @@ const is_listTo = ref(false);
 const updateGoods = computed(() => {
   return goods.updateGoodsInfo;
 });
-// watchEffect(() => {
-//   if (props.is_update) {
-//     let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
-//       updateGoods.value;
-//     if (goods_price) {
-//       is_listTo.value = true;
-//       goods_price = Number(goods_price);
-//     }
-//     ruleForm.value = { goods_price, ...res };
-//   }
-// });
+// 原始的图片数据
+const ownImgData = computed(() => {
+  return img.imgList;
+});
 onActivated(() => {
   if (props.is_update) {
-    let { createdAt, updatedAt, deletedAt, goods_price, ...res } =
+    let { createdAt, updatedAt, deletedAt, goods_price, id, ...res } =
       updateGoods.value;
     if (goods_price) {
       is_listTo.value = true;
       goods_price = Number(goods_price);
     }
-    ruleForm.value = { goods_price, ...res };
+    img.getimgList(id);
+    ruleForm.value = { goods_price, id, ...res };
   }
 });
 
-const rules = reactive<FormRules>({
+const rules = reactive({
   id: [{ required: true, message: "请输入商品编号", trigger: "blur" }],
   goods_name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
   goods_price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
   goods_num: [{ required: true, message: "请输入商品数量", trigger: "blur" }],
-  goods_img: [{ required: true, message: "请输入商品图片", trigger: "blur" }],
+  // goods_img: [
+  //   { required: true, message: "请至少选择一张商品图片", trigger: "blur" },
+  // ],
 });
 
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl) => {
   if (!formEl) return;
   await formEl.validate((valid) => {
     if (valid) {
@@ -128,7 +128,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         goods.importGoods(res, false);
       } else {
         // 处于修改
-        goods.setUpdateGoods(ruleForm.value);
+        const { id } = ruleForm.value;
+        goods.setUpdateGoods(ruleForm.value).then(async (res) => {
+          for await (const key of imgList.value) {
+            const { img_name, url } = key;
+            addImg_api({ img_name, img_id: id, url });
+          }
+        });
       }
       is_listTo.value = false;
       router.push("/goods/list");
@@ -138,7 +144,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   });
 };
 
-const resetForm = (formEl: FormInstance | undefined) => {
+const resetForm = (formEl) => {
   if (!formEl) return;
   is_listTo.value = false;
   ruleForm.value = {
@@ -146,8 +152,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
     goods_name: "",
     goods_price: "",
     goods_num: "",
-    goods_img: "",
   };
+};
+const imgList = ref([]);
+const handledImgData = (val) => {
+  imgList.value = val;
+  console.log(imgList.value);
 };
 </script>
 <style lang="scss" scoped>

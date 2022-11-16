@@ -9,6 +9,7 @@ import {
 } from "@/api/goods";
 import { ElMessage } from "element-plus";
 import type { CreateGoods, GoodsList } from "@/interface/goods_interface";
+import { stringToArray } from "@/utils/img_url_handle";
 
 export const goodsStore = defineStore("goods", () => {
   /* 获取商品列表 */

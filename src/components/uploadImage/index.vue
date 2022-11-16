@@ -7,6 +7,7 @@
     :on-remove="handleRemove"
     :before-upload="beforeUpload"
     :http-request="upload"
+    :limit="6"
   >
     <el-icon><Plus /></el-icon>
   </el-upload>
@@ -21,45 +22,22 @@ import COS from "cos-js-sdk-v5";
 import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import { SECRET_ID, SECRET_KEY, BUCKET, REGION } from "../../../privacy/cos";
+const props = defineProps({
+  fileListOwnData: {
+    type: Array,
+    default() {
+      return {};
+    },
+  },
+});
+const emits = defineEmits(["img-list"]);
 const dialogVisible = ref(false);
 const cos = new COS({
-  SecretId: "AKIDkJdhnfIgpkPpytZx6ZnkTv61iFXYJohL", // 密钥id
-  SecretKey: "Vloc9PPDm46QVKuEKBpDOJzRgiV3OXR6", // 密钥 key
+  SecretId: SECRET_ID, // 密钥id
+  SecretKey: SECRET_KEY, // 密钥 key
 }); // 实例化的包 已经具有了上传的能力 可以上传到该账号里面的存储桶了
-const fileList = ref([
-  {
-    name: "food.jpeg",
-    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-  },
-  {
-    name: "plant-1.png",
-    url: "https://vkceyugu.cdn.bspapp.com/VKCEYUGU-7059d53f-a4ca-4b65-894a-7a6054b27583/262a6f36-b4b0-4fa1-8dcc-93ae06b4f243.png",
-  },
-  {
-    name: "food.jpeg",
-    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-  },
-  {
-    name: "plant-2.png",
-    url: "https://cms-1305646665.cos.ap-guangzhou.myqcloud.com/avatar.jpg",
-  },
-  {
-    name: "food.jpeg",
-    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-  },
-  {
-    name: "figure-1.png",
-    url: "/images/figure-1.png",
-  },
-  {
-    name: "food.jpeg",
-    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-  },
-  {
-    name: "figure-2.png",
-    url: "/images/figure-2.png",
-  },
-]);
+const fileList = ref(props.fileListOwnData);
 const imgUrl = ref("");
 const showPercent = ref(false);
 const percent = ref(0);
@@ -69,6 +47,14 @@ const preview = (file) => {
   dialogVisible.value = true;
 };
 const beforeUpload = (file) => {
+  // 检查是否重复上传
+  const res = fileList.value.filter((item) => {
+    return item.img_name === file.name;
+  });
+  if (res.length > 0) {
+    ElMessage.error("该图片已经存在");
+    return false;
+  }
   // 允许上传的文件类型
   const types = ["image/jpeg", "image/gif", "image/bmp", "image/png"];
   if (!types.includes(file.type)) {
@@ -80,7 +66,7 @@ const beforeUpload = (file) => {
     ElMessage.error("图片大小最大不能超过1M");
     return false;
   }
-  currentImageUid.value = file.uid;
+  currentImageUid.value = file.uid; //传入图片的时间戳
   showPercent.value = true;
   return true;
 };
@@ -90,8 +76,8 @@ const upload = (params) => {
     // 执行上传操作
     cos.putObject(
       {
-        Bucket: "cms-1305646665", // 存储桶
-        Region: "ap-guangzhou", // 地域
+        Bucket: BUCKET, // 存储桶
+        Region: REGION, // 地域
         Key: params.file.name, // 文件名
         Body: params.file, // 要上传的文件对象
         StorageClass: "STANDARD", // 上传的模式类型 直接默认 标准模式即可
@@ -101,29 +87,30 @@ const upload = (params) => {
       },
       (err, data) => {
         // data返回数据之后 应该如何处理
+        console.log(data);
         if (err) return;
         fileList.value = fileList.value.map((item) => {
           if (item.uid === currentImageUid.value) {
-            return { url: "http://" + data.Location, name: item.name };
+            const url = "http://" + data.Location;
+            const img_name = item.name;
+            return { url, img_name };
           }
           return item;
         });
-        // console.log(this.fileList);
+        emits("img-list", fileList.value);
       }
     );
   }
 };
-const handleRemove = (file, fileList) => {
-  this.fileList = this.fileList.filter((item) => item.uid !== file.uid);
-  // console.log(file)
+const handleRemove = (file) => {
   cos.deleteObject(
     {
-      Bucket: "xxx" /* 必须 */,
-      Region: "ap-nanjing" /* 存储桶所在地域，必须字段 */,
-      Key: file.name /* 必须 */,
+      Bucket: BUCKET /* 必须 */,
+      Region: REGION /* 存储桶所在地域，必须字段 */,
+      Key: file.img_name /* 必须 */,
     },
     (err, data) => {
-      // console.log(err || data)
+      console.log(data);
     }
   );
 };

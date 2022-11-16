@@ -45,11 +45,13 @@
         label="商品数量"
         :min-width="width"
       />
-      <el-table-column
-        property="goods_img"
-        label="商品图片"
-        :min-width="width"
-      />
+      <el-table-column label="商品图片" :min-width="width">
+        <template #default="scope">
+          <el-icon :size="20" class="imgIcon" @click="checkImg(scope.row.id)"
+            ><PictureFilled
+          /></el-icon>
+        </template>
+      </el-table-column>
       <el-table-column
         label="上架时间"
         show-overflow-tooltip
@@ -111,13 +113,14 @@
 import { ref, computed } from "vue";
 import { ElMessage, ElTable } from "element-plus";
 import { Bottom, Plus, Top } from "@element-plus/icons-vue";
-import { goodsStore } from "@/stores";
+import { goodsStore, imgStore } from "@/stores";
 import type { GoodsList } from "@/interface/goods_interface";
 import { useRouter } from "vue-router";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
 const goods = goodsStore();
+const img = imgStore();
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<GoodsList[]>([]);
 const handleSelectionChange = (val: GoodsList[]) => {
@@ -191,6 +194,10 @@ const handleOffAll = () => {
   });
   ElMessage.success("全部商品下架成功");
 };
+// 获取改商品的所有图片
+const checkImg = (id: Number) => {
+  img.getimgList(id);
+};
 </script>
 
 <style scoped lang="scss">
@@ -208,5 +215,8 @@ const handleOffAll = () => {
   height: 50px;
   display: flex;
   justify-content: center;
+}
+.imgIcon {
+  cursor: pointer;
 }
 </style>
