@@ -17,3 +17,12 @@ export const getImgList_api = (id) => {
     method: "GET",
   });
 };
+
+// 删除图片
+export const deleteImg_api = (data) => {
+  return request({
+    url: "/img/delete",
+    method: "POST",
+    data,
+  });
+};

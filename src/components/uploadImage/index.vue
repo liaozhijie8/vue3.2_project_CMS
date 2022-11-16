@@ -19,10 +19,13 @@
 
 <script lang="ts" setup>
 import COS from "cos-js-sdk-v5";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { SECRET_ID, SECRET_KEY, BUCKET, REGION } from "../../../privacy/cos";
+import { deleteImg_api, addImg_api } from "@/api/img";
+import { imgStore } from "@/stores";
+const img = imgStore();
 const props = defineProps({
   fileListOwnData: {
     type: Array,
@@ -31,13 +34,20 @@ const props = defineProps({
     },
   },
 });
-const emits = defineEmits(["img-list"]);
+const fileList = ref(props.fileListOwnData);
+// 监听原来拥有的图片数据
+watch(
+  () => props.fileListOwnData,
+  () => {
+    fileList.value = props.fileListOwnData;
+  }
+);
 const dialogVisible = ref(false);
 const cos = new COS({
   SecretId: SECRET_ID, // 密钥id
   SecretKey: SECRET_KEY, // 密钥 key
 }); // 实例化的包 已经具有了上传的能力 可以上传到该账号里面的存储桶了
-const fileList = ref(props.fileListOwnData);
+
 const imgUrl = ref("");
 const showPercent = ref(false);
 const percent = ref(0);
@@ -93,11 +103,12 @@ const upload = (params) => {
           if (item.uid === currentImageUid.value) {
             const url = "http://" + data.Location;
             const img_name = item.name;
+            // 添加图片
+            addImg_api({ img_id: img.currentId, img_name, url });
             return { url, img_name };
           }
           return item;
         });
-        emits("img-list", fileList.value);
       }
     );
   }
@@ -110,7 +121,7 @@ const handleRemove = (file) => {
       Key: file.img_name /* 必须 */,
     },
     (err, data) => {
-      console.log(data);
+      deleteImg_api({ img_id: img.currentId, img_name: file.img_name });
     }
   );
 };

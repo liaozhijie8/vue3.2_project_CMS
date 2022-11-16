@@ -43,25 +43,21 @@
       </el-form-item>
     </el-form>
     <DrawerBox v-model="isDrawer">
-      <template #header><h4>上传图片</h4></template>
+      <template #header><h4>图片管理</h4></template>
       <template #content>
-        <UploadImage
-          @img-list="handledImgData"
-          :file-list-own-data="ownImgData"
-        ></UploadImage>
+        <UploadImage :file-list-own-data="fileList"></UploadImage>
       </template>
     </DrawerBox>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onActivated, reactive, ref } from "vue";
+import { computed, onActivated, reactive, ref, watch } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import DrawerBox from "@/components/drawer/index.vue";
 import UploadImage from "@/components/uploadImage/index.vue";
 import { goodsStore, imgStore } from "@/stores";
 import { useRouter } from "vue-router";
-import { addImg_api } from "@/api/img";
 
 const props = defineProps({
   is_update: {
@@ -92,8 +88,13 @@ const updateGoods = computed(() => {
   return goods.updateGoodsInfo;
 });
 // 原始的图片数据
+
 const ownImgData = computed(() => {
   return img.imgList;
+});
+const fileList = ref([]);
+watch(ownImgData, () => {
+  fileList.value = img.imgList;
 });
 onActivated(() => {
   if (props.is_update) {
@@ -128,13 +129,7 @@ const submitForm = async (formEl) => {
         goods.importGoods(res, false);
       } else {
         // 处于修改
-        const { id } = ruleForm.value;
-        goods.setUpdateGoods(ruleForm.value).then(async (res) => {
-          for await (const key of imgList.value) {
-            const { img_name, url } = key;
-            addImg_api({ img_name, img_id: id, url });
-          }
-        });
+        goods.setUpdateGoods(ruleForm.value);
       }
       is_listTo.value = false;
       router.push("/goods/list");
@@ -153,11 +148,6 @@ const resetForm = (formEl) => {
     goods_price: "",
     goods_num: "",
   };
-};
-const imgList = ref([]);
-const handledImgData = (val) => {
-  imgList.value = val;
-  console.log(imgList.value);
 };
 </script>
 <style lang="scss" scoped>
