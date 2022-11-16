@@ -106,6 +106,16 @@
         @current-change="currentEvent"
       />
     </div>
+    <!-- 图片墙 -->
+    <DialogBox v-model="dialogVisible">
+      <template #title>商品图片墙</template>
+      <template #content
+        ><CarouselCard :img-list="imgUrlList">
+          <template #content="{ data }">
+            <ImgBox :img-url="data.url"></ImgBox>
+          </template> </CarouselCard
+      ></template>
+    </DialogBox>
   </div>
 </template>
 
@@ -116,6 +126,9 @@ import { Bottom, Plus, Top } from "@element-plus/icons-vue";
 import { goodsStore, imgStore } from "@/stores";
 import type { GoodsList } from "@/interface/goods_interface";
 import { useRouter } from "vue-router";
+import DialogBox from "@/components/dialog/index.vue";
+import CarouselCard from "@/components/carouselCard/index.vue";
+import ImgBox from "@/components/imgBox/index.vue";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
@@ -195,8 +208,13 @@ const handleOffAll = () => {
   ElMessage.success("全部商品下架成功");
 };
 // 获取改商品的所有图片
-const checkImg = (id: Number) => {
-  img.getimgList(id);
+const dialogVisible = ref(false);
+const imgUrlList = ref([]);
+const checkImg = (id: number) => {
+  img.getimgList(id).then((res) => {
+    imgUrlList.value = img.imgList;
+    dialogVisible.value = true;
+  });
 };
 </script>
 

@@ -31,9 +31,8 @@
           placeholder="请输入数量"
         />
       </el-form-item>
-      <el-form-item label="商品图片" prop="goods_img">
+      <el-form-item v-if="is_update" label="商品图片">
         <el-button @click="displayDrawer">上传图片</el-button>
-        <input v-model="ruleForm.goods_img" v-show="false" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)"
@@ -114,9 +113,6 @@ const rules = reactive({
   goods_name: [{ required: true, message: "请输入商品名称", trigger: "blur" }],
   goods_price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
   goods_num: [{ required: true, message: "请输入商品数量", trigger: "blur" }],
-  // goods_img: [
-  //   { required: true, message: "请至少选择一张商品图片", trigger: "blur" },
-  // ],
 });
 
 const submitForm = async (formEl) => {
