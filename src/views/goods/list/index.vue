@@ -129,6 +129,7 @@ import { useRouter } from "vue-router";
 import DialogBox from "@/components/dialog/index.vue";
 import CarouselCard from "@/components/carouselCard/index.vue";
 import ImgBox from "@/components/imgBox/index.vue";
+import { fullScreen } from "@/utils/loading";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
@@ -211,8 +212,11 @@ const handleOffAll = () => {
 const dialogVisible = ref(false);
 const imgUrlList = ref([]);
 const checkImg = (id: number) => {
+  // loading
+  const loading = fullScreen();
   img.getimgList(id).then((res) => {
     imgUrlList.value = img.imgList;
+    loading.close();
     dialogVisible.value = true;
   });
 };

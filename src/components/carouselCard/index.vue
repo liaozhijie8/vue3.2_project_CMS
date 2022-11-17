@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="4000" type="card" height="600px">
+  <el-carousel :autoplay="false" type="card" height="600px" :loop="false">
     <el-carousel-item
       v-for="item in imgList"
       :key="item.id"

@@ -7,14 +7,18 @@
     :on-remove="handleRemove"
     :before-upload="beforeUpload"
     :http-request="upload"
+    :on-exceed="exceedEvent"
     :limit="6"
   >
     <el-icon><Plus /></el-icon>
   </el-upload>
   <el-progress v-if="showPercent" style="width: 180px" :percentage="percent" />
-  <el-dialog v-model="dialogVisible">
-    <img w-full :src="imgUrl" alt="Preview Image" />
-  </el-dialog>
+  <DialogBox v-model="dialogVisible">
+    <template #title>{{ imgName }}</template>
+    <template #content>
+      <ImgBox class="img-container" :img-url="imgUrl"></ImgBox>
+    </template>
+  </DialogBox>
 </template>
 
 <script lang="ts" setup>
@@ -24,6 +28,8 @@ import { Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { SECRET_ID, SECRET_KEY, BUCKET, REGION } from "../../../privacy/cos";
 import { deleteImg_api, addImg_api } from "@/api/img";
+import DialogBox from "@/components/dialog/index.vue";
+import ImgBox from "@/components/imgBox/index.vue";
 import { imgStore } from "@/stores";
 const img = imgStore();
 const props = defineProps({
@@ -49,11 +55,13 @@ const cos = new COS({
 }); // 实例化的包 已经具有了上传的能力 可以上传到该账号里面的存储桶了
 
 const imgUrl = ref("");
+const imgName = ref("");
 const showPercent = ref(false);
 const percent = ref(0);
 const currentImageUid = ref(null);
 const preview = (file) => {
   imgUrl.value = file.url;
+  imgName.value = file.img_name;
   dialogVisible.value = true;
 };
 const beforeUpload = (file) => {
@@ -125,4 +133,12 @@ const handleRemove = (file) => {
     }
   );
 };
+const exceedEvent = () => {
+  ElMessage.error("最多只能添加六张图片");
+};
 </script>
+<style lang="scss" scoped>
+.img-container {
+  height: 600px;
+}
+</style>
