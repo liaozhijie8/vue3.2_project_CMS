@@ -54,7 +54,10 @@
       />
       <el-table-column label="商品图片" :min-width="width">
         <template #default="scope">
-          <el-icon :size="20" class="imgIcon" @click="checkImg(scope.row.id)"
+          <el-icon
+            :size="20"
+            class="imgIcon"
+            @click="checkImg(scope.row.img_url)"
             ><ZoomIn
           /></el-icon>
         </template>
@@ -136,13 +139,11 @@ import { useRouter } from "vue-router";
 import DialogBox from "@/components/dialog/index.vue";
 import CarouselCard from "@/components/carouselCard/index.vue";
 import ImgBox from "@/components/imgBox/index.vue";
-import { fullScreen } from "@/utils/loading";
 import { getSortName } from "@/utils/sort_handle";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
 const goods = goodsStore();
-const img = imgStore();
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<GoodsList[]>([]);
 const handleSelectionChange = (val: GoodsList[]) => {
@@ -219,14 +220,9 @@ const handleOffAll = () => {
 // 获取改商品的所有图片
 const dialogVisible = ref(false);
 const imgUrlList = ref([]);
-const checkImg = (id: number) => {
-  // loading
-  const loading = fullScreen();
-  img.getimgList(id).then((res) => {
-    imgUrlList.value = img.imgList;
-    loading.close();
-    dialogVisible.value = true;
-  });
+const checkImg = (url) => {
+  imgUrlList.value = url;
+  dialogVisible.value = true;
 };
 </script>
 

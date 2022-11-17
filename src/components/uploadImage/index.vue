@@ -36,7 +36,7 @@ const props = defineProps({
   fileListOwnData: {
     type: Array,
     default() {
-      return {};
+      return [];
     },
   },
 });
