@@ -35,8 +35,11 @@
         <el-button @click="displayDrawer">上传图片</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)"
-          >Create</el-button
+        <el-button
+          type="primary"
+          @click="submitForm(ruleFormRef)"
+          :loading="loading"
+          >{{ is_update ? "更新商品" : "新建商品" }}</el-button
         >
         <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
       </el-form-item>
@@ -114,18 +117,23 @@ const rules = reactive({
   goods_price: [{ required: true, message: "请输入商品价格", trigger: "blur" }],
   goods_num: [{ required: true, message: "请输入商品数量", trigger: "blur" }],
 });
-
+const loading = ref(false);
 const submitForm = async (formEl) => {
   if (!formEl) return;
   await formEl.validate((valid) => {
     if (valid) {
       // 处于创建状态
+      loading.value = true;
       if (!props.is_update) {
         const { id, ...res } = ruleForm.value;
-        goods.importGoods(res, false);
+        goods.importGoods(res, false).then((res) => {
+          loading.value = false;
+        });
       } else {
         // 处于修改
-        goods.setUpdateGoods(ruleForm.value);
+        goods.setUpdateGoods(ruleForm.value).then((res) => {
+          loading.value = false;
+        });
       }
       is_listTo.value = false;
       router.push("/goods/list");

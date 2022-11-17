@@ -5,6 +5,7 @@
     width="80%"
     center
     :append-to-body="true"
+    :destroy-on-close="true"
     @close="closeEvent"
   >
     <template #header>

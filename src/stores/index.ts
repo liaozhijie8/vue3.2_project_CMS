@@ -7,6 +7,7 @@ import { goodsStore } from "./goods";
 import { roleStore } from "./role";
 import { permissionStore } from "./permission";
 import { imgStore } from "./img";
+import { sortStore } from "./sort";
 const store = createPinia();
 
 export {
@@ -19,4 +20,5 @@ export {
   roleStore,
   permissionStore,
   imgStore,
+  sortStore,
 };

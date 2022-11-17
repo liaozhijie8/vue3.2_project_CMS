@@ -122,16 +122,23 @@ const upload = (params) => {
   }
 };
 const handleRemove = (file) => {
-  cos.deleteObject(
-    {
-      Bucket: BUCKET /* 必须 */,
-      Region: REGION /* 存储桶所在地域，必须字段 */,
-      Key: file.img_name /* 必须 */,
-    },
-    (err, data) => {
-      deleteImg_api({ img_id: img.currentId, img_name: file.img_name });
-    }
-  );
+  deleteImg_api({ img_id: img.currentId, img_name: file.img_name })
+    .then((res) => {
+      ElMessage.success(res.message);
+    })
+    .catch((err) => {
+      ElMessage.error(err.message);
+    });
+  // cos.deleteObject(
+  //   {
+  //     Bucket: BUCKET /* 必须 */,
+  //     Region: REGION /* 存储桶所在地域，必须字段 */,
+  //     Key: file.img_name /* 必须 */,
+  //   },
+  //   (err, data) => {
+
+  //   }
+  // );
 };
 const exceedEvent = () => {
   ElMessage.error("最多只能添加六张图片");

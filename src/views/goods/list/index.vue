@@ -29,6 +29,11 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" min-width="10" />
+      <el-table-column label="类型" min-width="10">
+        <template #default="scope">
+          <el-button size="small">{{ scope.row.sort_id }}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column property="id" label="序号" min-width="10" />
       <el-table-column
         property="goods_name"
@@ -48,7 +53,7 @@
       <el-table-column label="商品图片" :min-width="width">
         <template #default="scope">
           <el-icon :size="20" class="imgIcon" @click="checkImg(scope.row.id)"
-            ><PictureFilled
+            ><ZoomIn
           /></el-icon>
         </template>
       </el-table-column>

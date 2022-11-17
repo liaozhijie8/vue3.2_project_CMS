@@ -5,10 +5,12 @@ import {
   goodsStore,
   roleStore,
   permissionStore,
+  sortStore,
 } from "./stores";
 const goods = goodsStore(store);
 const user = userStore(store);
 const role = roleStore(store);
+const sort = sortStore(store);
 const permission = permissionStore(store);
 
 /* 白名单 */
@@ -36,6 +38,9 @@ router.beforeEach(async (to, from, next) => {
       }
       if (!role.hasRoleslist) {
         await role.getRoleList();
+      }
+      if (!sort.hasSortList) {
+        await sort.getSortList();
       }
       next();
     }
