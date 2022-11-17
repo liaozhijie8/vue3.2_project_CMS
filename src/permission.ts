@@ -14,6 +14,8 @@ const sort = sortStore(store);
 const permission = permissionStore(store);
 
 /* 白名单 */
+
+
 const whiteList = ["/login"];
 router.beforeEach(async (to, from, next) => {
   //用户已登录

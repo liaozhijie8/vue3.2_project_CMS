@@ -34,6 +34,20 @@
       <el-form-item v-if="is_update" label="商品图片">
         <el-button @click="displayDrawer">上传图片</el-button>
       </el-form-item>
+      <el-form-item label="商品种类">
+        <el-select
+          v-model="ruleForm.sort_id"
+          clearable
+          placeholder="请选择商品种类"
+        >
+          <el-option
+            v-for="item in sortData"
+            :key="item.id"
+            :label="item.sort_name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -58,7 +72,7 @@ import { computed, onActivated, reactive, ref, watch } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import DrawerBox from "@/components/drawer/index.vue";
 import UploadImage from "@/components/uploadImage/index.vue";
-import { goodsStore, imgStore } from "@/stores";
+import { goodsStore, imgStore, sortStore } from "@/stores";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
@@ -72,6 +86,7 @@ const isDrawer = ref(false);
 const displayDrawer = () => {
   isDrawer.value = true;
 };
+const sort = sortStore();
 const router = useRouter();
 const goods = goodsStore();
 const img = imgStore();
@@ -82,6 +97,7 @@ let ruleForm = ref({
   goods_name: "",
   goods_price: "",
   goods_num: "",
+  sort_id: "",
 });
 // 判断是否为商品列表跳转的修改行为
 const is_listTo = ref(false);
@@ -90,7 +106,6 @@ const updateGoods = computed(() => {
   return goods.updateGoodsInfo;
 });
 // 原始的图片数据
-
 const ownImgData = computed(() => {
   return img.imgList;
 });
@@ -100,14 +115,17 @@ watch(ownImgData, () => {
 });
 onActivated(() => {
   if (props.is_update) {
-    let { createdAt, updatedAt, deletedAt, goods_price, id, ...res } =
+    let { createdAt, updatedAt, deletedAt, goods_price, id, sort_id, ...res } =
       updateGoods.value;
     if (goods_price) {
       is_listTo.value = true;
       goods_price = Number(goods_price);
     }
+    if (sort_id !== null && sort_id !== undefined) {
+      sort_id = Number(sort_id);
+    }
     img.getimgList(id);
-    ruleForm.value = { goods_price, id, ...res };
+    ruleForm.value = { goods_price, id, sort_id, ...res };
   }
 });
 
@@ -151,8 +169,13 @@ const resetForm = (formEl) => {
     goods_name: "",
     goods_price: "",
     goods_num: "",
+    sort_id: "",
   };
 };
+/* 商品种类数据 */
+const sortData = computed(() => {
+  return sort.allSortList;
+});
 </script>
 <style lang="scss" scoped>
 .upload-page {

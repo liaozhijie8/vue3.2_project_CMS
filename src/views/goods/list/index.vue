@@ -29,12 +29,14 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" min-width="10" />
-      <el-table-column label="类型" min-width="10">
+      <el-table-column label="类型" min-width="20">
         <template #default="scope">
-          <el-button size="small">{{ scope.row.sort_id }}</el-button>
+          <el-button size="small">{{
+            getSortName(scope.row.sort_id)
+          }}</el-button>
         </template>
       </el-table-column>
-      <el-table-column property="id" label="序号" min-width="10" />
+      <el-table-column property="id" label="序号" min-width="20" />
       <el-table-column
         property="goods_name"
         label="商品名称"
@@ -135,6 +137,7 @@ import DialogBox from "@/components/dialog/index.vue";
 import CarouselCard from "@/components/carouselCard/index.vue";
 import ImgBox from "@/components/imgBox/index.vue";
 import { fullScreen } from "@/utils/loading";
+import { getSortName } from "@/utils/sort_handle";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
