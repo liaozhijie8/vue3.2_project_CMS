@@ -133,7 +133,7 @@
 import { ref, computed } from "vue";
 import { ElMessage, ElTable } from "element-plus";
 import { Bottom, Plus, Top } from "@element-plus/icons-vue";
-import { goodsStore, imgStore } from "@/stores";
+import { goodsStore } from "@/stores";
 import type { GoodsList } from "@/interface/goods_interface";
 import { useRouter } from "vue-router";
 import DialogBox from "@/components/dialog/index.vue";

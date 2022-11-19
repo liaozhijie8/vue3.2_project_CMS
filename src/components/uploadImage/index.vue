@@ -64,12 +64,16 @@ const preview = (file) => {
   imgName.value = file.img_name;
   dialogVisible.value = true;
 };
+// 是否是重复图片
+const isExist = ref(false);
 const beforeUpload = (file) => {
+  isExist.value = false;
   // 检查是否重复上传
   const res = fileList.value.filter((item) => {
     return item.img_name === file.name;
   });
   if (res.length > 0) {
+    isExist.value = true;
     ElMessage.error("该图片已经存在");
     return false;
   }
@@ -122,13 +126,17 @@ const upload = (params) => {
   }
 };
 const handleRemove = (file) => {
-  deleteImg_api({ img_id: img.currentId, img_name: file.img_name })
-    .then((res) => {
-      ElMessage.success(res.message);
-    })
-    .catch((err) => {
-      ElMessage.error(err.message);
-    });
+  console.log(file);
+  if (!isExist.value) {
+    deleteImg_api({ img_id: img.currentId, img_name: file.img_name })
+      .then((res) => {
+        ElMessage.success(res.message);
+      })
+      .catch((err) => {
+        ElMessage.error(err.message);
+      });
+  }
+
   // cos.deleteObject(
   //   {
   //     Bucket: BUCKET /* 必须 */,
