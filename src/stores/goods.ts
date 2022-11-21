@@ -9,7 +9,8 @@ import {
 } from "@/api/goods";
 import { ElMessage } from "element-plus";
 import type { CreateGoods, GoodsList } from "@/interface/goods_interface";
-import { stringToArray } from "@/utils/img_url_handle";
+import { getItem, setItem } from "@/utils/storage";
+import { UPDATE_GOODSINFO } from "@/constant";
 
 export const goodsStore = defineStore("goods", () => {
   /* 获取商品列表 */
@@ -85,10 +86,11 @@ export const goodsStore = defineStore("goods", () => {
     });
   }
   /* 跳转修改页携带的参数 */
-  const updateGoodsInfo = ref({});
+  const updateGoodsInfo = ref(getItem(UPDATE_GOODSINFO));
   // 填入参数
   function injectInfo(palyload: GoodsList) {
     updateGoodsInfo.value = palyload;
+    setItem(UPDATE_GOODSINFO, palyload);
   }
   // 清空参数
   function removeInfo() {

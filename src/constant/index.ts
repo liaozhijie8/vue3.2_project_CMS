@@ -14,3 +14,8 @@ export const TAGS_VIEW = "tagsView";
 
 // 超级管理员
 export const SUPER_ADMID = "超级管理员";
+
+// 当前编辑的商品id
+export const CURRENT_ID = "currentId";
+// 编辑携带的参数
+export const UPDATE_GOODSINFO = "updateGoodsInfo";

@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import { getImgList_api } from "@/api/img";
 import { ref } from "vue";
+import { getItem, setItem } from "@/utils/storage";
+import { CURRENT_ID } from "@/constant";
 export const imgStore = defineStore("img", () => {
   const imgList = ref([]);
-  const currentId = ref(0);
+  const currentId = ref(getItem(CURRENT_ID));
   const getimgList = (id: number) => {
-    currentId.value = id;
+    imgList.value = id;
+    setItem(CURRENT_ID, id);
     return new Promise((resolve, reject) => {
       getImgList_api(id)
         .then((res) => {

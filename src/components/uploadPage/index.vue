@@ -34,6 +34,9 @@
       <el-form-item v-if="is_update" label="商品图片">
         <el-button @click="displayDrawer">上传图片</el-button>
       </el-form-item>
+      <el-form-item label="商品规格">
+        <el-button @click="diaplayVersion">编辑版本</el-button>
+      </el-form-item>
       <el-form-item label="商品种类">
         <el-select
           v-model="ruleForm.sort_id"
@@ -58,10 +61,18 @@
         <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
       </el-form-item>
     </el-form>
+    <!-- 图片管理抽屉 -->
     <DrawerBox v-model="isDrawer">
       <template #header><h4>图片管理</h4></template>
       <template #content>
         <UploadImage :file-list-own-data="fileList"></UploadImage>
+      </template>
+    </DrawerBox>
+    <!-- 版本编辑抽屉 -->
+    <DrawerBox v-model="isVersionDrawer">
+      <template #header><h4>版本管理</h4></template>
+      <template #content>
+        <VersionTable></VersionTable>
       </template>
     </DrawerBox>
   </div>
@@ -74,6 +85,9 @@ import DrawerBox from "@/components/drawer/index.vue";
 import UploadImage from "@/components/uploadImage/index.vue";
 import { goodsStore, imgStore, sortStore } from "@/stores";
 import { useRouter } from "vue-router";
+import VersionTable from "./versionTable/index.vue";
+import { getItem } from "@/utils/storage";
+import { CURRENT_ID } from "@/constant";
 
 const props = defineProps({
   is_update: {
@@ -81,6 +95,11 @@ const props = defineProps({
     default: false,
   },
 });
+// 显示版本编辑drawer
+const isVersionDrawer = ref(false);
+const diaplayVersion = () => {
+  isVersionDrawer.value = true;
+};
 // 控制drawer显示
 const isDrawer = ref(false);
 const displayDrawer = () => {
@@ -124,7 +143,11 @@ onActivated(() => {
     if (sort_id !== null && sort_id !== undefined) {
       sort_id = Number(sort_id);
     }
-    img.getimgList(id);
+    if (id !== undefined) {
+      img.getimgList(id);
+    } else {
+      img.getimgList(getItem(CURRENT_ID));
+    }
     ruleForm.value = { goods_price, id, sort_id, ...res };
   }
 });
