@@ -43,3 +43,12 @@ export const updateGoods = (id: number, data: CreateGoods) => {
     data,
   });
 };
+
+// 获取某一分类下所有商品
+export const getSortAllGoodsInfo_api = (id: number, pageSize) => {
+  return request({
+    url: `/goods/sort/list/${id}`,
+    method: "GET",
+    params: { pageSize, pageNum: 1 },
+  });
+};

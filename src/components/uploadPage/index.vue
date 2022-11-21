@@ -72,7 +72,7 @@
     <DrawerBox v-model="isVersionDrawer">
       <template #header><h4>版本管理</h4></template>
       <template #content>
-        <VersionTable></VersionTable>
+        <VersionTable @version-data="versionData"></VersionTable>
       </template>
     </DrawerBox>
   </div>
@@ -95,10 +95,13 @@ const props = defineProps({
     default: false,
   },
 });
-// 显示版本编辑drawer
+/*  版本编辑drawer */
 const isVersionDrawer = ref(false);
 const diaplayVersion = () => {
   isVersionDrawer.value = true;
+};
+const versionData = (val) => {
+  console.log(val);
 };
 // 控制drawer显示
 const isDrawer = ref(false);

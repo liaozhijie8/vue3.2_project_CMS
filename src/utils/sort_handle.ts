@@ -16,3 +16,20 @@ export const getSortName = (id) => {
     return "未分类";
   }
 };
+
+// 处理过滤分类
+export const getFilter = (val) => {
+  const temp = [];
+  val.forEach((item) => {
+    const arrObject = { text: item.sort_name, value: item.sort_name };
+    temp.push(arrObject);
+  });
+  return temp;
+};
+
+// 商品版本数据处理
+export const getGoodsVersion = (val) => {
+  console.log(val);
+  const temp = [];
+  return temp;
+};

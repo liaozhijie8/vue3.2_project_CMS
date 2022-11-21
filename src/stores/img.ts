@@ -7,7 +7,7 @@ export const imgStore = defineStore("img", () => {
   const imgList = ref([]);
   const currentId = ref(getItem(CURRENT_ID));
   const getimgList = (id: number) => {
-    imgList.value = id;
+    currentId.value = id;
     setItem(CURRENT_ID, id);
     return new Promise((resolve, reject) => {
       getImgList_api(id)

@@ -29,7 +29,12 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" min-width="10" />
-      <el-table-column label="类型" min-width="20">
+      <el-table-column
+        label="类型"
+        min-width="20"
+        :filters="getFilter(sort.allSortList)"
+        :filter-method="filterHandler"
+      >
         <template #default="scope">
           <el-button size="small">{{
             getSortName(scope.row.sort_id)
@@ -133,17 +138,20 @@
 import { ref, computed } from "vue";
 import { ElMessage, ElTable } from "element-plus";
 import { Bottom, Plus, Top } from "@element-plus/icons-vue";
-import { goodsStore } from "@/stores";
+import { goodsStore, sortStore } from "@/stores";
 import type { GoodsList } from "@/interface/goods_interface";
 import { useRouter } from "vue-router";
 import DialogBox from "@/components/dialog/index.vue";
 import CarouselCard from "@/components/carouselCard/index.vue";
 import ImgBox from "@/components/imgBox/index.vue";
 import { getSortName } from "@/utils/sort_handle";
+import { getFilter } from "@/utils/sort_handle";
+import { fullScreen } from "@/utils/loading";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
 const goods = goodsStore();
+const sort = sortStore();
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<GoodsList[]>([]);
 const handleSelectionChange = (val: GoodsList[]) => {
@@ -175,6 +183,10 @@ const currentPage = ref(1);
 const currentEvent = () => {
   goods.getGoods_list(currentPage.value);
 };
+/* 筛选数据 */
+const filterHandler = (value, row) => {
+  return row.sort_name.sort_name === value;
+};
 /* 增加商品 */
 const router = useRouter();
 const addClick = () => {
@@ -186,11 +198,18 @@ const addExcelClick = () => {
   router.push("/goods/create");
 };
 /* 操作 */
+// 显示加载中
 const handleOn = (row: GoodsList) => {
-  goods.setGoodsOn(row.id);
+  const loading = fullScreen();
+  goods.setGoodsOn(row.id).finally(() => {
+    loading.close();
+  });
 };
 const handleOff = (row: GoodsList) => {
-  goods.setGoodsOff(row.id);
+  const loading = fullScreen();
+  goods.setGoodsOff(row.id).finally(() => {
+    loading.close();
+  });
 };
 // 修改商品
 const handleEdit = (row: GoodsList) => {

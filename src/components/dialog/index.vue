@@ -3,7 +3,7 @@
     :model-value="modelValue"
     title="Warning"
     width="80%"
-    center
+    :align-center="true"
     :append-to-body="true"
     :destroy-on-close="true"
     @close="closeEvent"
@@ -12,6 +12,9 @@
       <slot name="title">插槽写入标题</slot>
     </template>
     <slot name="content">插槽写入内容</slot>
+    <template #footer>
+      <slot name="footer"></slot>
+    </template>
   </el-dialog>
 </template>
 <script lang="ts" setup>
