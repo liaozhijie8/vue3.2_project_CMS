@@ -17,7 +17,7 @@ export const stringToArray = (string: String) => {
 
 // 数组转化为字符串
 export const arrayToString = (array) => {
-  let temp = [];
+  const temp = [];
   for (const value of array) {
     const res = `${value.name}=${value.url}`;
     temp.push(res);

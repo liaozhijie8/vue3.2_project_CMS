@@ -147,6 +147,7 @@ import ImgBox from "@/components/imgBox/index.vue";
 import { getSortName } from "@/utils/sort_handle";
 import { getFilter } from "@/utils/sort_handle";
 import { fullScreen } from "@/utils/loading";
+import { debounce } from "lodash";
 
 const red = ref("#F56C6C");
 const green = ref("#67C23A");
@@ -199,18 +200,18 @@ const addExcelClick = () => {
 };
 /* 操作 */
 // 显示加载中
-const handleOn = (row: GoodsList) => {
+const handleOn = debounce((row: GoodsList) => {
   const loading = fullScreen();
   goods.setGoodsOn(row.id).finally(() => {
     loading.close();
   });
-};
-const handleOff = (row: GoodsList) => {
+}, 1000);
+const handleOff = debounce((row: GoodsList) => {
   const loading = fullScreen();
   goods.setGoodsOff(row.id).finally(() => {
     loading.close();
   });
-};
+}, 1000);
 // 修改商品
 const handleEdit = (row: GoodsList) => {
   router.push({

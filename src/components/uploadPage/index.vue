@@ -101,7 +101,7 @@ const diaplayVersion = () => {
   isVersionDrawer.value = true;
 };
 const versionData = (val) => {
-  console.log(val);
+  // console.log(val);
 };
 // 控制drawer显示
 const isDrawer = ref(false);

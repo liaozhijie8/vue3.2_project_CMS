@@ -35,6 +35,7 @@ import { filterRouters } from "@/utils/route";
 import { generateRoutes } from "./fuseData";
 import { appStore } from "@/stores";
 import Fuse from "fuse.js";
+import { throttle } from "lodash";
 /* 检索的数据源 */
 const router = useRouter();
 let searchPool = computed(() => {
@@ -115,7 +116,8 @@ const search = ref("");
 /* 搜索方法 */
 const loading = ref(false);
 const searchOptions = ref([]);
-const querySearch = (query: string) => {
+const querySearch = throttle((query: string) => {
+  console.log("1");
   if (query) {
     loading.value = true;
     setTimeout(() => {
@@ -125,8 +127,7 @@ const querySearch = (query: string) => {
   } else {
     searchOptions.value = [];
   }
-};
-
+}, 1000);
 </script>
 <style scoped lang="scss">
 .header-search {

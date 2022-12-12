@@ -79,7 +79,12 @@ const submitForm = async (formEl) => {
   await formEl.validate((valid, fields) => {
     if (valid) {
       const { format_sort, version_sort } = formLabelAlign;
-      emits("form-data", { format_sort, version_sort, list: tableData.value });
+      emits("form-data", {
+        id: Date.now(),
+        format_sort,
+        version_sort,
+        list: tableData.value,
+      });
     } else {
       console.log("error submit!", fields);
     }

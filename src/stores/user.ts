@@ -9,7 +9,7 @@ import {
   removeUser,
   restoreUser,
 } from "@/api/user";
-import { TOKEN } from "@/constant";
+import { PROFILE, TOKEN } from "@/constant";
 import { setItem, getItem, removeAllItem } from "@/utils/storage";
 import router from "@/router";
 import { ElMessage } from "element-plus";

@@ -28,8 +28,9 @@ export const getFilter = (val) => {
 };
 
 // 商品版本数据处理
-export const getGoodsVersion = (val) => {
-  console.log(val);
-  const temp = [];
-  return temp;
+export const getGoodsVersion = (val, name, list) => {
+  const temp = list.filter((item) => {
+    return item.color_name === val;
+  });
+  return temp[0][name];
 };

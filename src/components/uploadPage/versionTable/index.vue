@@ -7,11 +7,28 @@
     </el-table-column>
     <el-table-column label="颜色" width="120">
       <template #default="scope">
-        <SelectBox></SelectBox>
+        <SelectBox @options-value="optionsValue($event, scope.$index)">
+          <template #options>
+            <el-option
+              v-for="item in scope.row.list"
+              :key="item.color_name"
+              :label="item.color_name"
+              :value="item.color_name"
+            />
+          </template>
+        </SelectBox>
       </template>
     </el-table-column>
-    <el-table-column label="价格" width="100"><p>价格</p> </el-table-column>
-    <el-table-column label="库存" width="100"><p>库存</p> </el-table-column>
+    <el-table-column label="价格" width="100">
+      <template #default="scope">
+        {{ isDisplay(scope.$index, "price", scope.row.list) }}
+      </template>
+    </el-table-column>
+    <el-table-column label="库存" width="100"
+      ><template #default="scope">
+        {{ isDisplay(scope.$index, "stock", scope.row.list) }}
+      </template>
+    </el-table-column>
     <el-table-column label="Operations">
       <template #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
@@ -26,6 +43,7 @@
       </template>
     </el-table-column>
   </el-table>
+
   <DialogBox v-model="isEditDialog" width="28%">
     <template #title><h4>编辑参数</h4></template>
     <template #content>
@@ -48,7 +66,40 @@ const handleEdit = (index: number, row: Version) => {
 const handleDelete = (index: number, row: Version) => {
   console.log(index, row);
 };
-
+const tableData2 = [
+  {
+    id: 1,
+    date: "2016-05-02",
+    name: "wangxiaohu",
+  },
+  {
+    id: 2,
+    date: "2016-05-04",
+    name: "wangxiaohu",
+  },
+  {
+    id: 3,
+    date: "2016-05-01",
+    name: "wangxiaohu",
+    children: [
+      {
+        id: 31,
+        date: "2016-05-01",
+        name: "wangxiaohu",
+      },
+      {
+        id: 32,
+        date: "2016-05-01",
+        name: "wangxiaohu",
+      },
+    ],
+  },
+  {
+    id: 4,
+    date: "2016-05-03",
+    name: "wangxiaohu",
+  },
+];
 const tableData = ref([]);
 // 显示添加框
 const isEditDialog = ref(false);
@@ -59,5 +110,18 @@ const openEdit = () => {
 const formData = (val) => {
   tableData.value.push(val);
   emits("version-data", tableData.value);
+};
+const optionsVal = ref({});
+const optionsValue = (event, val) => {
+  optionsVal.value = { id: val, option: event };
+  console.log(optionsVal.value);
+};
+const isDisplay = (id, name, list) => {
+  console.log(id);
+  if (id === optionsVal.value.id) {
+    return getGoodsVersion(optionsVal.value.option, name, list);
+  } else {
+    return;
+  }
 };
 </script>
